@@ -65,7 +65,7 @@ class OrderInfoCard extends StatelessWidget {
                                   const EdgeInsets.all(8.0),
                                   child: CachedNetworkImage(
                                     imageUrl: product
-                                        .product.images.first,
+                                        .product.image,
                                   ),
                                 )),
                           ),

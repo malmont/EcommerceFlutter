@@ -23,7 +23,7 @@ class FilterProductParams {
   final List<Category> categories;
   final double minPrice;
   final double maxPrice;
-  final int? limit;
+  final int? limit; // Ceci représente la page actuelle
   final int? pageSize;
 
   const FilterProductParams({
@@ -31,7 +31,7 @@ class FilterProductParams {
     this.categories = const [],
     this.minPrice = 0,
     this.maxPrice = 10000,
-    this.limit = 0,
+    this.limit = 1,  // Page commence à 1
     this.pageSize = 10,
   });
 
@@ -49,7 +49,7 @@ class FilterProductParams {
         categories: categories ?? this.categories,
         minPrice: minPrice ?? this.minPrice,
         maxPrice: maxPrice ?? this.maxPrice,
-        limit: skip ?? this.limit,
+        limit: limit ?? this.limit,  // Assurez-vous d'utiliser limit ici
         pageSize: pageSize ?? this.pageSize,
       );
 }

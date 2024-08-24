@@ -49,6 +49,7 @@ dependencies:
   equatable: ^2.0.5
   dartz: ^0.10.1
   internet_connection_checker: ^1.0.0+1
+  dart_jsonwebtoken: ^2.14.0
 
   #ui
   oktoast: ^3.3.1

@@ -80,7 +80,7 @@ class ProductCard extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(32.0),
                       child: CachedNetworkImage(
-                        imageUrl: product!.images.first,
+                        imageUrl: product!.image,
                         placeholder: (context, url) => Shimmer.fromColors(
                           baseColor: Colors.grey.shade100,
                           highlightColor: Colors.white,
@@ -124,7 +124,7 @@ class ProductCard extends StatelessWidget {
                           ),
                         )
                       : Text(
-                          r'$' + product!.priceTags.first.price.toString(),
+                          r'$' + product!.price.toString(),
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,

@@ -1,66 +1,125 @@
+import 'package:eshop/data/models/style_model.dart';
+import 'package:eshop/data/models/variant_model.dart';
 import '../../../domain/entities/product/product.dart';
 import '../category/category_model.dart';
-import 'price_tag_model.dart';
 
 class ProductModel extends Product {
   const ProductModel({
     required String id,
     required String name,
     required String description,
-    required List<PriceTagModel> priceTags,
-    required List<CategoryModel> categories,
-    required List<String> images,
+    String? moreInformations,
+    required int price,
+    required int purchasePrice,
+    required int coefficientMultiplier,
+    String? barcode,
+    required bool isBestseller,
+    required bool isNewArrival,
+    required bool isFeatured,
+    required bool isSpecialOffer,
+    required String image,
+    required int quantity,
     required DateTime createdAt,
-    required DateTime updatedAt,
+    String? tags,
+    required String slug,
+    required StyleModel style,
+    required List<VariantModel> variants,
+    required List<CategoryModel> category,
   }) : super(
           id: id,
           name: name,
           description: description,
-          priceTags: priceTags,
-          categories: categories,
-          images: images,
+          moreInformations: moreInformations,
+          price: price,
+          purchasePrice: purchasePrice,
+          coefficientMultiplier: coefficientMultiplier,
+          barcode: barcode,
+          isBestseller: isBestseller,
+          isNewArrival: isNewArrival,
+          isFeatured: isFeatured,
+          isSpecialOffer: isSpecialOffer,
+          image: image,
+          quantity: quantity,
           createdAt: createdAt,
-          updatedAt: updatedAt,
+          tags: tags,
+          slug: slug,
+          style: style,
+          variants: variants,
+          category: category,
         );
 
   factory ProductModel.fromJson(Map<String, dynamic> json) => ProductModel(
-        id: json["_id"],
+        id: json["id"].toString(),
         name: json["name"],
         description: json["description"],
-        priceTags: List<PriceTagModel>.from(
-            json["priceTags"].map((x) => PriceTagModel.fromJson(x))),
-        categories: List<CategoryModel>.from(
-            json["categories"].map((x) => CategoryModel.fromJson(x))),
-        images: List<String>.from(json["images"].map((x) => x)),
+        moreInformations: json["moreinformations"],
+        price: json["price"],
+        purchasePrice: json["purchasePrice"],
+        coefficientMultiplier: json["coefficientMultiplier"],
+        barcode: json["barcode"],
+        isBestseller: json["isbestseller"],
+        isNewArrival: json["isnewarrival"],
+        isFeatured: json["isfeatured"],
+        isSpecialOffer: json["isspecialoffer"],
+        image: json["image"],
+        quantity: json["quantity"],
         createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
+        tags: json["tags"],
+        slug: json["slug"],
+        style: StyleModel.fromJson(json["style"]),
+        variants: List<VariantModel>.from(
+            json["variants"].map((x) => VariantModel.fromJson(x))),
+        category: List<CategoryModel>.from(
+            json["category"].map((x) => CategoryModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
+        "id": id,
         "name": name,
         "description": description,
-        "priceTags": List<dynamic>.from(
-            (priceTags as List<PriceTagModel>).map((x) => x.toJson())),
-        "categories": List<dynamic>.from(
-            (categories as List<CategoryModel>).map((x) => x.toJson())),
-        "images": List<dynamic>.from(images.map((x) => x)),
+        "moreinformations": moreInformations,
+        "price": price,
+        "purchasePrice": purchasePrice,
+        "coefficientMultiplier": coefficientMultiplier,
+        "barcode": barcode,
+        "isbestseller": isBestseller,
+        "isnewarrival": isNewArrival,
+        "isfeatured": isFeatured,
+        "isspecialoffer": isSpecialOffer,
+        "image": image,
+        "quantity": quantity,
         "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
+        "tags": tags,
+        "slug": slug,
+        "style": style.toJson(),
+        "variants": List<dynamic>.from(variants.map((x) => x.toJson())),
+        "category": List<dynamic>.from(category.map((x) => x.toJson())),
       };
 
   factory ProductModel.fromEntity(Product entity) => ProductModel(
         id: entity.id,
         name: entity.name,
         description: entity.description,
-        priceTags: entity.priceTags
-            .map((priceTag) => PriceTagModel.fromEntity(priceTag))
+        moreInformations: entity.moreInformations,
+        price: entity.price,
+        purchasePrice: entity.purchasePrice,
+        coefficientMultiplier: entity.coefficientMultiplier,
+        barcode: entity.barcode,
+        isBestseller: entity.isBestseller,
+        isNewArrival: entity.isNewArrival,
+        isFeatured: entity.isFeatured,
+        isSpecialOffer: entity.isSpecialOffer,
+        image: entity.image,
+        quantity: entity.quantity,
+        createdAt: entity.createdAt,
+        tags: entity.tags,
+        slug: entity.slug,
+        style: StyleModel.fromEntity(entity.style),
+        variants: entity.variants
+            .map((variant) => VariantModel.fromEntity(variant))
             .toList(),
-        categories: entity.categories
+        category: entity.category
             .map((category) => CategoryModel.fromEntity(category))
             .toList(),
-        images: entity.images,
-        createdAt: entity.createdAt,
-        updatedAt: entity.updatedAt,
       );
 }

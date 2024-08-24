@@ -7,6 +7,7 @@ import '../../../core/constant/strings.dart';
 import '../../../domain/usecases/product/get_product_usecase.dart';
 import '../../models/product/product_response_model.dart';
 
+
 abstract class ProductRemoteDataSource {
   Future<ProductResponseModel> getProducts(FilterProductParams params);
 }
@@ -16,8 +17,21 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
   ProductRemoteDataSourceImpl({required this.client});
 
   @override
-  Future<ProductResponseModel> getProducts(params) => _getProductFromUrl(
-      '$baseUrl/products?keyword=${params.keyword}&pageSize=${params.pageSize}&page=${params.limit}&categories=${jsonEncode(params.categories.map((e) => e.id).toList())}');
+  Future<ProductResponseModel> getProducts(FilterProductParams params) {
+    // S'assurez que la page (limit) commence à 1
+    final int page = params.limit != null && params.limit! > 0 ? params.limit! : 1;
+    final int pageSize = params.pageSize != null && params.pageSize! > 0 ? params.pageSize! : 10;
+    
+    final categoriesParam = Uri.encodeComponent(jsonEncode(params.categories.map((e) => e.id).toList()));
+    final url = 'https://backend-strapi.online/jeesign/api/products/by-category'
+                '?keyword=${Uri.encodeComponent(params.keyword ?? '')}'
+                '&page=$page'
+                '&pageSize=$pageSize'
+                '&categories=$categoriesParam';
+    
+    print('Requesting URL: $url');
+    return _getProductFromUrl(url);
+  }
 
   Future<ProductResponseModel> _getProductFromUrl(String url) async {
     final response = await client.get(
@@ -33,3 +47,4 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
     }
   }
 }
+

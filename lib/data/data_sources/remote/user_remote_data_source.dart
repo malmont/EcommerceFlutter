@@ -21,12 +21,12 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
   @override
   Future<AuthenticationResponseModel> signIn(SignInParams params) async {
     final response =
-        await client.post(Uri.parse('$baseUrl/authentication/local/sign-in'),
+        await client.post(Uri.parse('https://backend-strapi.online/jeesign/api/login'),
             headers: {
               'Content-Type': 'application/json',
             },
             body: json.encode({
-              'identifier': params.username,
+              'username': params.username,
               'password': params.password,
             }));
     if (response.statusCode == 200) {

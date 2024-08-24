@@ -25,12 +25,29 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
   @override
   void initState() {
-    _selectedPriceTag = widget.product.priceTags.first;
+    _selectedPriceTag = PriceTag(
+      id: 'default',
+      price: widget.product.price,
+      name: 'Default Price Tag',
+    );
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    List<PriceTag> fakePriceTags = [
+      PriceTag(
+        id: '1',
+        price: widget.product.price,
+        name: 'Default Price Tag 1',
+      ),
+      PriceTag(
+        id: '2',
+        price: widget.product.price * 1.1,
+        name: 'Default Price Tag 2',
+      ),
+    ];
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -57,13 +74,13 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   });
                 },
               ),
-              items: widget.product.images.map((image) {
-                return Builder(
+              items: [
+                Builder(
                   builder: (BuildContext context) {
                     return Hero(
                       tag: widget.product.id,
                       child: CachedNetworkImage(
-                        imageUrl: image,
+                        imageUrl: widget.product.image,
                         imageBuilder: (context, imageProvider) => Container(
                           decoration: BoxDecoration(
                             image: DecorationImage(
@@ -89,8 +106,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                       ),
                     );
                   },
-                );
-              }).toList(),
+                ),
+              ],
             ),
           ),
           Padding(
@@ -99,7 +116,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
               alignment: Alignment.center,
               child: AnimatedSmoothIndicator(
                 activeIndex: _currentIndex,
-                count: widget.product.images.length,
+                count: 1,  // Puisque vous n'avez qu'une seule image
                 effect: ScrollingDotsEffect(
                     dotColor: Colors.grey.shade300,
                     maxVisibleDots: 7,
@@ -125,7 +142,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
               right: 20,
             ),
             child: Wrap(
-              children: widget.product.priceTags
+              children: fakePriceTags
                   .map((priceTag) => GestureDetector(
                         onTap: () {
                           setState(() {
@@ -208,7 +225,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                       cartItem: CartItem(
                           product: widget.product,
                           priceTag: _selectedPriceTag)));
-                  // print("test");
                   Navigator.pop(context);
                 },
                 titleText: "Add to Cart",

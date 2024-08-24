@@ -92,7 +92,7 @@ class CartItemCard extends StatelessWidget {
                         : Padding(
                             padding: const EdgeInsets.all(24.0),
                             child: CachedNetworkImage(
-                              imageUrl: cartItem!.product.images.first,
+                              imageUrl: cartItem!.product.image,
                               placeholder: (context, url) => const Center(
                                   child: CircularProgressIndicator()),
                               errorWidget: (context, url, error) =>
