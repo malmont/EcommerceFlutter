@@ -1,3 +1,4 @@
+import 'package:eshop/domain/usecases/cart/remove_cart_usecase.dart';
 import 'package:eshop/domain/usecases/delivery_info/clear_local_delivery_info_usecase.dart';
 import 'package:eshop/domain/usecases/delivery_info/edit_delivery_info_usecase.dart';
 import 'package:eshop/domain/usecases/delivery_info/get_selected_delivery_info_usecase.dart';
@@ -115,13 +116,14 @@ Future<void> init() async {
   //Features - Cart
   // Bloc
   sl.registerFactory(
-    () => CartBloc(sl(), sl(), sl(), sl()),
+    () => CartBloc(sl(), sl(), sl(), sl(), sl()),
   );
   // Use cases
   sl.registerLazySingleton(() => GetCachedCartUseCase(sl()));
   sl.registerLazySingleton(() => AddCartUseCase(sl()));
   sl.registerLazySingleton(() => SyncCartUseCase(sl()));
   sl.registerLazySingleton(() => ClearCartUseCase(sl()));
+   sl.registerLazySingleton(() => RemoveCartUseCase(sl()));
   // Repository
   sl.registerLazySingleton<CartRepository>(
     () => CartRepositoryImpl(

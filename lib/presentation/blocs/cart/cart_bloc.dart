@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:eshop/domain/usecases/cart/remove_cart_usecase.dart';
 
 import '../../../core/error/failures.dart';
 import '../../../core/usecases/usecase.dart';
@@ -17,14 +18,18 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   final AddCartUseCase _addCartUseCase;
   final SyncCartUseCase _syncCartUseCase;
   final ClearCartUseCase _clearCartUseCase;
+  final RemoveCartUseCase _removeCartUseCase;
+
   CartBloc(
     this._getCachedCartUseCase,
     this._addCartUseCase,
     this._syncCartUseCase,
     this._clearCartUseCase,
+    this._removeCartUseCase,
   ) : super(const CartInitial(cart: [])) {
     on<GetCart>(_onGetCart);
     on<AddProduct>(_onAddToCart);
+    on<RemoveProduct>(_onRemoveFromCart);
     on<ClearCart>(_onClearCart);
   }
 
@@ -46,22 +51,68 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       emit(CartError(failure: ExceptionFailure(), cart: state.cart));
     }
   }
+void _onAddToCart(AddProduct event, Emitter<CartState> emit) async {
+  try {
+    emit(CartLoading(cart: state.cart));
 
-  void _onAddToCart(AddProduct event, Emitter<CartState> emit) async {
-    try {
-      emit(CartLoading(cart: state.cart));
-      List<CartItem> cart = [];
-      cart.addAll(state.cart);
-      cart.add(event.cartItem);
-      var result = await _addCartUseCase(event.cartItem);
-      result.fold(
-            (failure) => emit(CartError(cart: state.cart, failure: failure)),
-            (_) => emit(CartLoaded(cart: cart)),
-      );
-    } catch (e) {
-      emit(CartError(cart: state.cart, failure: ExceptionFailure()));
-    }
+    // Appel du use case pour ajouter l'item au panier
+    final result = await _addCartUseCase(event.cartItem);
+
+    await result.fold(
+      (failure) async {
+        emit(CartError(cart: state.cart, failure: failure));
+      },
+      (_) async {
+        // Récupérer la dernière version du panier après ajout
+        final updatedCartItems = await _getCachedCartUseCase(NoParams());
+        updatedCartItems.fold(
+          (failure) => emit(CartError(cart: state.cart, failure: failure)),
+          (cartItems) {
+            emit(CartLoaded(cart: cartItems));
+          },
+        );
+      },
+    );
+  } catch (e) {
+    emit(CartError(cart: state.cart, failure: ExceptionFailure()));
   }
+}
+
+
+
+void _onRemoveFromCart(RemoveProduct event, Emitter<CartState> emit) async {
+  try {
+    emit(CartLoading(cart: state.cart));
+
+    final result = await _removeCartUseCase(event.cartItem);
+
+    result.fold(
+      (failure) => emit(CartError(cart: state.cart, failure: failure)),
+      (_) {
+        final updatedCart = List<CartItem>.from(state.cart);
+        final existingItemIndex = updatedCart.indexWhere(
+          (item) => item.product.id == event.cartItem.product.id,
+        );
+
+        if (existingItemIndex != -1) {
+          final existingItem = updatedCart[existingItemIndex];
+          if (existingItem.quantity > 1) {
+            updatedCart[existingItemIndex] = existingItem.copyWith(
+              quantity: existingItem.quantity - 1,
+            );
+          } else {
+            updatedCart.removeAt(existingItemIndex);
+          }
+        }
+
+        emit(CartLoaded(cart: updatedCart));
+      },
+    );
+  } catch (e) {
+    emit(CartError(cart: state.cart, failure: ExceptionFailure()));
+  }
+}
+
 
   void _onClearCart(ClearCart event, Emitter<CartState> emit) async {
     try {
