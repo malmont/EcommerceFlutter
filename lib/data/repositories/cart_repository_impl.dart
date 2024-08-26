@@ -20,12 +20,34 @@ class CartRepositoryImpl implements CartRepository {
     required this.localDataSource,
     required this.userLocalDataSource,
     required this.networkInfo,
-  });
+  }); 
 
-  @override
-  Future<Either<Failure, CartItem>> addToCart(CartItem params) async {
+@override
+Future<Either<Failure, CartItem>> addToCart(CartItem params) async {
+  try {
+    // Récupérer le panier actuel (ou une liste vide si aucun enregistrement n'est trouvé)
+    final List<CartItemModel> cartItems = await localDataSource.getCart();
+    
+    // Vérifier si le produit existe déjà dans le panier
+    final existingItemIndex = cartItems.indexWhere(
+      (item) => item.product.id == params.product.id,
+    );
+
+    if (existingItemIndex != -1) {
+      // Le produit existe déjà, on incrémente la quantité
+      final existingItem = cartItems[existingItemIndex];
+      cartItems[existingItemIndex] = existingItem.copyWith(
+        quantity: existingItem.quantity + 1,
+      );
+    } else {
+      // Le produit n'existe pas, on l'ajoute
+      cartItems.add(CartItemModel.fromParent(params));
+    }
+
+    // Sauvegarde locale après la mise à jour du panier
+    await localDataSource.saveCart(cartItems);
+
     if (await userLocalDataSource.isTokenAvailable()) {
-      await localDataSource.saveCartItem(CartItemModel.fromParent(params));
       final String token = await userLocalDataSource.getToken();
       final remoteProduct = await remoteDataSource.addToCart(
         CartItemModel.fromParent(params),
@@ -33,16 +55,52 @@ class CartRepositoryImpl implements CartRepository {
       );
       return Right(remoteProduct);
     } else {
-      await localDataSource.saveCartItem(CartItemModel.fromParent(params));
       return Right(params);
+    }
+  } catch (e) {
+    // En cas d'erreur, renvoyer un échec de cache
+    return Left(CacheFailure());
+  }
+}
+@override
+  Future<Either<Failure, void>> removeFromCart(CartItem params) async {
+    try {
+      final List<CartItemModel> cartItems = await localDataSource.getCart();
+      
+      final existingItemIndex = cartItems.indexWhere(
+        (item) => item.product.id == params.product.id,
+      );
+
+      if (existingItemIndex != -1) {
+        final existingItem = cartItems[existingItemIndex];
+        if (existingItem.quantity > 1) {
+          cartItems[existingItemIndex] = existingItem.copyWith(
+            quantity: existingItem.quantity - 1,
+          );
+        } else {
+          cartItems.removeAt(existingItemIndex);
+        }
+
+        // Sauvegarde locale après la suppression
+        await localDataSource.saveCart(cartItems);
+
+        if (await userLocalDataSource.isTokenAvailable()) {
+          final String token = await userLocalDataSource.getToken();
+          await remoteDataSource.removeFromCart(
+            CartItemModel.fromParent(params),
+            token,
+          );
+        }
+
+        return const Right(null);
+      } else {
+        return Left(CacheFailure());
+      }
+    } catch (e) {
+      return Left(CacheFailure());
     }
   }
 
-  @override
-  Future<Either<Failure, bool>> deleteFormCart() {
-    // TODO: implement deleteFormCart
-    throw UnimplementedError();
-  }
 
   @override
   Future<Either<Failure, List<CartItem>>> getCachedCart() async {

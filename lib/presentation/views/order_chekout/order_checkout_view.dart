@@ -164,7 +164,7 @@ class OrderCheckoutView extends StatelessWidget {
                                             height: 4,
                                           ),
                                           Text(
-                                              '\$${product.priceTag.price.toStringAsFixed(2)}')
+                                              '\$${product.product.price.toStringAsFixed(2)}')
                                         ],
                                       ),
                                     )
@@ -198,7 +198,7 @@ class OrderCheckoutView extends StatelessWidget {
                           children: [
                             const Text("Total Price"),
                             Text(
-                                "\$${items.fold(0.0, (previousValue, element) => (element.priceTag.price + previousValue))}")
+                                "\$${items.fold(0.0, (previousValue, element) => (element.product.price  + previousValue))}")
                           ],
                         ),
                         const Row(
@@ -210,7 +210,7 @@ class OrderCheckoutView extends StatelessWidget {
                           children: [
                             const Text("Total"),
                             Text(
-                                "\$${(items.fold(0.0, (previousValue, element) => (element.priceTag.price + previousValue)) + 4.99)}")
+                                "\$${(items.fold(0.0, (previousValue, element) => (element.product.price + previousValue)) + 4.99)}")
                           ],
                         )
                       ],
@@ -240,8 +240,7 @@ class OrderCheckoutView extends StatelessWidget {
                               .map((item) => OrderItem(
                                     id: '',
                                     product: item.product,
-                                    priceTag: item.priceTag,
-                                    price: item.priceTag.price,
+                                    price: item.product.price,
                                     quantity: 1,
                                   ))
                               .toList(),

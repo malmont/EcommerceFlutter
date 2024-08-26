@@ -21,33 +21,23 @@ class ProductDetailsView extends StatefulWidget {
 
 class _ProductDetailsViewState extends State<ProductDetailsView> {
   int _currentIndex = 0;
-  late PriceTag _selectedPriceTag;
 
   @override
   void initState() {
-    _selectedPriceTag = PriceTag(
-      id: 'default',
-      price: widget.product.price,
-      name: 'Default Price Tag',
-    );
     super.initState();
   }
 
+ String removeHtmlTags(String text) {
+  return text
+      .replaceAll('<blockquote>', '')
+      .replaceAll('</blockquote>', '')
+      .replaceAll('<div>', '')
+      .replaceAll('</div>', '');
+}
+
+
   @override
   Widget build(BuildContext context) {
-    List<PriceTag> fakePriceTags = [
-      PriceTag(
-        id: '1',
-        price: widget.product.price,
-        name: 'Default Price Tag 1',
-      ),
-      PriceTag(
-        id: '2',
-        price: widget.product.price * 1.1,
-        name: 'Default Price Tag 2',
-      ),
-    ];
-
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -58,133 +48,112 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           IconButton(onPressed: () {}, icon: const Icon(Icons.share)),
         ],
       ),
-      body: ListView(
-        children: [
-          SizedBox(
-            height: MediaQuery.sizeOf(context).width,
-            child: CarouselSlider(
-              options: CarouselOptions(
-                height: double.infinity,
-                enlargeCenterPage: true,
-                aspectRatio: 16 / 9,
-                viewportFraction: 1,
-                onPageChanged: (index, reason) {
-                  setState(() {
-                    _currentIndex = index;
-                  });
-                },
-              ),
-              items: [
-                Builder(
-                  builder: (BuildContext context) {
-                    return Hero(
-                      tag: widget.product.id,
-                      child: CachedNetworkImage(
-                        imageUrl: widget.product.image,
-                        imageBuilder: (context, imageProvider) => Container(
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: imageProvider,
-                              fit: BoxFit.contain,
-                              colorFilter: ColorFilter.mode(
-                                  Colors.grey.shade50.withOpacity(0.25),
-                                  BlendMode.softLight),
-                            ),
-                          ),
-                        ),
-                        placeholder: (context, url) => Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade100,
-                          ),
-                        ),
-                        errorWidget: (context, url, error) => const Center(
-                          child: Icon(
-                            Icons.error_outline,
-                            color: Colors.grey,
-                          ),
-                        ),
-                      ),
-                    );
+      body: Padding(
+        padding: const EdgeInsets.only(top: 40),
+        child: ListView(
+          children: [
+            SizedBox(
+              height: MediaQuery.sizeOf(context).width,
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  height: double.infinity,
+                  enlargeCenterPage: true,
+                  aspectRatio: 16 / 9,
+                  viewportFraction: 1,
+                  onPageChanged: (index, reason) {
+                    setState(() {
+                      _currentIndex = index;
+                    });
                   },
                 ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Align(
-              alignment: Alignment.center,
-              child: AnimatedSmoothIndicator(
-                activeIndex: _currentIndex,
-                count: 1,  // Puisque vous n'avez qu'une seule image
-                effect: ScrollingDotsEffect(
-                    dotColor: Colors.grey.shade300,
-                    maxVisibleDots: 7,
-                    activeDotColor: Colors.grey,
-                    dotHeight: 6,
-                    dotWidth: 6,
-                    activeDotScale: 1.1,
-                    spacing: 6),
-              ),
-            ),
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 20, right: 14, top: 20, bottom: 4),
-            child: Text(
-              widget.product.name,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 20,
-              right: 20,
-            ),
-            child: Wrap(
-              children: fakePriceTags
-                  .map((priceTag) => GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _selectedPriceTag = priceTag;
-                          });
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              width: _selectedPriceTag.id == priceTag.id
-                                  ? 2.0
-                                  : 1.0,
+                items: [
+                  Builder(
+                    builder: (BuildContext context) {
+                      return Hero(
+                        tag: widget.product.id,
+                        child: CachedNetworkImage(
+                          imageUrl: widget.product.image,
+                          imageBuilder: (context, imageProvider) => Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: imageProvider,
+                                fit: BoxFit.contain,
+                                colorFilter: ColorFilter.mode(
+                                    Colors.grey.shade50.withOpacity(0.25),
+                                    BlendMode.softLight),
+                              ),
+                            ),
+                          ),
+                          placeholder: (context, url) => Container(
+                            decoration: BoxDecoration(
+                              color: Colors.grey.shade100,
+                            ),
+                          ),
+                          errorWidget: (context, url, error) => const Center(
+                            child: Icon(
+                              Icons.error_outline,
                               color: Colors.grey,
                             ),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(5.0)),
-                          ),
-                          padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.only(right: 4),
-                          child: Column(
-                            children: [
-                              Text(priceTag.name),
-                              Text(priceTag.price.toString()),
-                            ],
                           ),
                         ),
-                      ))
-                  .toList(),
+                      );
+                    },
+                  ),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(
-                left: 20,
-                right: 10,
-                top: 16,
-                bottom: MediaQuery.of(context).padding.bottom),
-            child: Text(
-              widget.product.description,
-              style: const TextStyle(fontSize: 14),
+            const SizedBox(
+              height: 20,
             ),
-          )
-        ],
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.2),
+                      spreadRadius: 3,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                padding: const EdgeInsets.all(16),
+                child: Row(
+                  children: [
+                    Text(
+                      '\$${widget.product.price.toString()}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(
+                          left: 20,
+                          right: 10,
+                          bottom: MediaQuery.of(context).padding.bottom),
+                      child: Text(
+                        removeHtmlTags(widget.product.description),
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black54,
+                          height: 1.5,
+                        ),
+                        textAlign: TextAlign.justify,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+         
+          ],
+        ),
       ),
       bottomNavigationBar: Container(
         color: Theme.of(context).colorScheme.secondary,
@@ -208,7 +177,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   style: TextStyle(color: Colors.white70, fontSize: 16),
                 ),
                 Text(
-                  '\$${_selectedPriceTag.price}',
+                  '\$${widget.product.price.toString()}',
                   style: const TextStyle(
                       color: Colors.white,
                       fontSize: 18,
@@ -221,10 +190,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
               width: 120,
               child: InputFormButton(
                 onClick: () {
-                  context.read<CartBloc>().add(AddProduct(
-                      cartItem: CartItem(
-                          product: widget.product,
-                          priceTag: _selectedPriceTag)));
+                  context.read<CartBloc>().add(
+                      AddProduct(cartItem: CartItem(product: widget.product)));
                   Navigator.pop(context);
                 },
                 titleText: "Add to Cart",
@@ -241,7 +208,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                       .pushNamed(AppRouter.orderCheckout, arguments: [
                     CartItem(
                       product: widget.product,
-                      priceTag: _selectedPriceTag,
                     )
                   ]);
                 },

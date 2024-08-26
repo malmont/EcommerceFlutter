@@ -6,13 +6,11 @@ class OrderItemModel extends OrderItem {
   const OrderItemModel({
     required String id,
     required ProductModel product,
-    required PriceTagModel priceTag,
     required num price,
     required num quantity,
   }) : super(
           id: id,
           product: product,
-          priceTag: priceTag,
           price: price,
           quantity: quantity,
         );
@@ -20,14 +18,12 @@ class OrderItemModel extends OrderItem {
   factory OrderItemModel.fromJson(Map<String, dynamic> json) => OrderItemModel(
       id: json["_id"],
       product: ProductModel.fromJson(json["product"]),
-      priceTag: PriceTagModel.fromJson(json["priceTag"]),
       price: json["price"],
       quantity: json["quantity"]);
 
   Map<String, dynamic> toJson() => {
         "_id": id,
         "product": (product as ProductModel).toJson(),
-        "priceTag": (priceTag as PriceTagModel).toJson(),
         "price": price,
         "quantity": quantity,
       };
@@ -35,7 +31,6 @@ class OrderItemModel extends OrderItem {
   Map<String, dynamic> toJsonBody() => {
         "_id": id,
         "product": product.id,
-        "priceTag": priceTag.id,
         "price": price,
         "quantity": quantity,
       };
@@ -43,7 +38,6 @@ class OrderItemModel extends OrderItem {
   factory OrderItemModel.fromEntity(OrderItem entity) => OrderItemModel(
         id: entity.id,
         product: ProductModel.fromEntity(entity.product),
-        priceTag: PriceTagModel.fromEntity(entity.priceTag),
         price: entity.price,
         quantity: entity.quantity,
       );

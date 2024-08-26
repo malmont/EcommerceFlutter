@@ -88,7 +88,7 @@ class OrderInfoCard extends StatelessWidget {
                                 height: 4,
                               ),
                               Text(
-                                  '\$${product.priceTag.price.toStringAsFixed(2)}')
+                                  '\$${product.product.price.toStringAsFixed(2)}')
                             ],
                           ),
                         )
