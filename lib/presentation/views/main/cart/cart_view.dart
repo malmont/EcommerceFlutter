@@ -123,7 +123,7 @@ class _CartViewState extends State<CartView> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  _getTotalItems(state.cart),
+                                  'Total items: ${state.totalItems}',
                                   style: const TextStyle(fontSize: 16),
                                 ),
                                 Text(

@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/error/exceptions.dart';
@@ -66,9 +67,17 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
   }
 
   @override
-  Future<bool> isTokenAvailable() async {
+   Future<bool> isTokenAvailable() async {
     String? token = await secureStorage.read(key: cachedToken);
-    return Future.value((token != null));
+    if (token != null) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      if (JwtDecoder.isExpired(token)) {
+        await secureStorage.delete(key: cachedToken);
+        return Future.value(false);
+      }
+      return Future.value(true);
+    }
+    return Future.value(false);
   }
 
   @override
