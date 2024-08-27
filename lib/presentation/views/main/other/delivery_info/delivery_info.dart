@@ -120,6 +120,7 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
   final TextEditingController city = TextEditingController();
   final TextEditingController zipCode = TextEditingController();
   final TextEditingController contactNumber = TextEditingController();
+   final TextEditingController country = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -133,6 +134,7 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
       city.text = widget.deliveryInfo!.city;
       zipCode.text = widget.deliveryInfo!.zipCode;
       contactNumber.text = widget.deliveryInfo!.contactNumber;
+      country.text = widget.deliveryInfo!.country;
     }
     super.initState();
   }
@@ -254,6 +256,20 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                       return null;
                     },
                   ),
+                   const SizedBox(
+                    height: 10,
+                  ),
+                  InputTextFormField(
+                    controller: country,
+                    hint: 'Country',
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    validation: (String? val) {
+                      if (val == null || val.isEmpty) {
+                        return 'This field can\'t be empty';
+                      }
+                      return null;
+                    },
+                  ),
                   const SizedBox(
                     height: 12,
                   ),
@@ -286,7 +302,7 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                                 addressLineTwo: addressLineTwo.text,
                                 city: city.text,
                                 zipCode: zipCode.text,
-                                contactNumber: contactNumber.text,
+                                contactNumber: contactNumber.text, country: country.text,
                               ));
                         } else {
                           context
@@ -299,7 +315,7 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                                 addressLineTwo: addressLineTwo.text,
                                 city: city.text,
                                 zipCode: zipCode.text,
-                                contactNumber: contactNumber.text,
+                                contactNumber: contactNumber.text, country: country.text,
                               ));
                         }
                       }

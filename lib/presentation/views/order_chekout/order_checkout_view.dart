@@ -140,8 +140,7 @@ class OrderCheckoutView extends StatelessWidget {
                                               padding:
                                                   const EdgeInsets.all(8.0),
                                               child: CachedNetworkImage(
-                                                imageUrl: product
-                                                    .product.image,
+                                                imageUrl: product.product.image,
                                               ),
                                             )),
                                       ),
@@ -163,11 +162,25 @@ class OrderCheckoutView extends StatelessWidget {
                                           const SizedBox(
                                             height: 4,
                                           ),
-                                          Text(
-                                              '\$${product.product.price.toStringAsFixed(2)}')
+                                          Row(
+                                            children: [
+                                              Text(
+                                                  '\$${product.product.price.toStringAsFixed(2)}'),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Text(
+                                                'x${product.quantity}',
+                                                style: const TextStyle(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                              ),
+                                            ],
+                                          )
                                         ],
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               ))
@@ -190,7 +203,14 @@ class OrderCheckoutView extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             const Text("Total Number of Items"),
-                            Text("x${items.length}")
+                            BlocBuilder<CartBloc, CartState>(
+                                builder: (context, state) {
+                              if (state.cart.isEmpty) {
+                                return const SizedBox();
+                              }
+
+                              return Text("x${state.totalItems}");
+                            }),
                           ],
                         ),
                         Row(
@@ -198,7 +218,8 @@ class OrderCheckoutView extends StatelessWidget {
                           children: [
                             const Text("Total Price"),
                             Text(
-                                "\$${items.fold(0.0, (previousValue, element) => (element.product.price  + previousValue))}")
+                              '\$${items.fold(0.0, (previousValue, element) => (element.product.price * element.quantity) + previousValue)}',
+                            ),
                           ],
                         ),
                         const Row(
@@ -210,7 +231,8 @@ class OrderCheckoutView extends StatelessWidget {
                           children: [
                             const Text("Total"),
                             Text(
-                                "\$${(items.fold(0.0, (previousValue, element) => (element.product.price + previousValue)) + 4.99)}")
+                              '\$${items.fold(0.0, (previousValue, element) => (element.product.price * element.quantity) + previousValue) + 4.99}',
+                            )
                           ],
                         )
                       ],
@@ -232,7 +254,8 @@ class OrderCheckoutView extends StatelessWidget {
                             .state
                             .selectedDeliveryInformation ==
                         null) {
-                      EasyLoading.showError("Error \nPlease select delivery add your delivery information");
+                      EasyLoading.showError(
+                          "Error \nPlease select delivery add your delivery information");
                     } else {
                       context.read<OrderAddCubit>().addOrder(OrderDetails(
                           id: '',

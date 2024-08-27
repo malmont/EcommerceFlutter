@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:eshop/core/error/exceptions.dart';
 import 'package:eshop/core/usecases/usecase.dart';
 
 import '../../../../core/error/failures.dart';
@@ -29,18 +30,22 @@ class DeliveryInfoRepositoryImpl implements DeliveryInfoRepository {
       if (await userLocalDataSource.isTokenAvailable()) {
         try {
           final String token = await userLocalDataSource.getToken();
-          final result = await remoteDataSource.getDeliveryInfo(
-            token,
-          );
+          final result = await remoteDataSource.getDeliveryInfo(token);
           await localDataSource.saveDeliveryInfo(result);
           return Right(result);
         } on Failure catch (failure) {
+          print('Failure caught: $failure');
           return Left(failure);
+        } catch (e) {
+          print('Unexpected error: $e');
+          return Left(ServerFailure()); // Or another custom failure
         }
       } else {
+        print('Authentication failure: token not available.');
         return Left(AuthenticationFailure());
       }
     } else {
+      print('Network failure: not connected.');
       return Left(NetworkFailure());
     }
   }

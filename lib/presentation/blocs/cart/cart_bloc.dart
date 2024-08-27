@@ -26,7 +26,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     this._syncCartUseCase,
     this._clearCartUseCase,
     this._removeCartUseCase,
-  ) : super(const CartInitial(cart: [])) {
+  ) : super(const CartInitial(cart: [], totalItems: 0)) {
     on<GetCart>(_onGetCart);
     on<AddProduct>(_onAddToCart);
     on<RemoveProduct>(_onRemoveFromCart);
@@ -35,92 +35,93 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   void _onGetCart(GetCart event, Emitter<CartState> emit) async {
     try {
-      emit(CartLoading(cart: state.cart));
+      emit(CartLoading(cart: state.cart, totalItems: state.totalItems));
+
       final result = await _getCachedCartUseCase(NoParams());
-      result.fold(
-        (failure) => emit(CartError(cart: state.cart, failure: failure)),
-        (cart) => emit(CartLoaded(cart: cart)),
-      );
-      final syncResult = await _syncCartUseCase(NoParams());
-      emit(CartLoading(cart: state.cart));
-      syncResult.fold(
-        (failure) => emit(CartError(cart: state.cart, failure: failure)),
-        (cart) => emit(CartLoaded(cart: cart)),
+      await result.fold(
+        (failure) async {
+          emit(CartError(cart: state.cart, failure: failure, totalItems: state.totalItems));
+        },
+        (cart) async {
+          emit(CartLoaded(cart: cart, totalItems: _getTotalItems(cart)));
+          final syncResult = await _syncCartUseCase(NoParams());
+          syncResult.fold(
+            (failure) => emit(CartError(cart: cart, failure: failure, totalItems: _getTotalItems(cart))),
+            (syncedCart) => emit(CartLoaded(cart: syncedCart, totalItems: _getTotalItems(syncedCart))),
+          );
+        },
       );
     } catch (e) {
-      emit(CartError(failure: ExceptionFailure(), cart: state.cart));
+      emit(CartError(failure: ExceptionFailure(), cart: state.cart, totalItems: state.totalItems));
     }
   }
-void _onAddToCart(AddProduct event, Emitter<CartState> emit) async {
-  try {
-    emit(CartLoading(cart: state.cart));
 
-    // Appel du use case pour ajouter l'item au panier
-    final result = await _addCartUseCase(event.cartItem);
+  void _onAddToCart(AddProduct event, Emitter<CartState> emit) async {
+    try {
+      emit(CartLoading(cart: state.cart, totalItems: state.totalItems));
 
-    await result.fold(
-      (failure) async {
-        emit(CartError(cart: state.cart, failure: failure));
-      },
-      (_) async {
-        // Récupérer la dernière version du panier après ajout
-        final updatedCartItems = await _getCachedCartUseCase(NoParams());
-        updatedCartItems.fold(
-          (failure) => emit(CartError(cart: state.cart, failure: failure)),
-          (cartItems) {
-            emit(CartLoaded(cart: cartItems));
-          },
-        );
-      },
-    );
-  } catch (e) {
-    emit(CartError(cart: state.cart, failure: ExceptionFailure()));
+      final result = await _addCartUseCase(event.cartItem);
+      await result.fold(
+        (failure) async {
+          emit(CartError(cart: state.cart, failure: failure, totalItems: state.totalItems));
+        },
+        (_) async {
+          final updatedCartItems = await _getCachedCartUseCase(NoParams());
+          updatedCartItems.fold(
+            (failure) => emit(CartError(cart: state.cart, failure: failure, totalItems: state.totalItems)),
+            (cartItems) {
+              emit(CartLoaded(cart: cartItems, totalItems: _getTotalItems(cartItems)));
+            },
+          );
+        },
+      );
+    } catch (e) {
+      emit(CartError(cart: state.cart, failure: ExceptionFailure(), totalItems: state.totalItems));
+    }
   }
-}
 
+  void _onRemoveFromCart(RemoveProduct event, Emitter<CartState> emit) async {
+    try {
+      emit(CartLoading(cart: state.cart, totalItems: state.totalItems));
 
+      final result = await _removeCartUseCase(event.cartItem);
+      result.fold(
+        (failure) => emit(CartError(cart: state.cart, failure: failure, totalItems: state.totalItems)),
+        (_) {
+          final updatedCart = List<CartItem>.from(state.cart);
+          final existingItemIndex = updatedCart.indexWhere(
+            (item) => item.product.id == event.cartItem.product.id,
+          );
 
-void _onRemoveFromCart(RemoveProduct event, Emitter<CartState> emit) async {
-  try {
-    emit(CartLoading(cart: state.cart));
-
-    final result = await _removeCartUseCase(event.cartItem);
-
-    result.fold(
-      (failure) => emit(CartError(cart: state.cart, failure: failure)),
-      (_) {
-        final updatedCart = List<CartItem>.from(state.cart);
-        final existingItemIndex = updatedCart.indexWhere(
-          (item) => item.product.id == event.cartItem.product.id,
-        );
-
-        if (existingItemIndex != -1) {
-          final existingItem = updatedCart[existingItemIndex];
-          if (existingItem.quantity > 1) {
-            updatedCart[existingItemIndex] = existingItem.copyWith(
-              quantity: existingItem.quantity - 1,
-            );
-          } else {
-            updatedCart.removeAt(existingItemIndex);
+          if (existingItemIndex != -1) {
+            final existingItem = updatedCart[existingItemIndex];
+            if (existingItem.quantity > 1) {
+              updatedCart[existingItemIndex] = existingItem.copyWith(
+                quantity: existingItem.quantity - 1,
+              );
+            } else {
+              updatedCart.removeAt(existingItemIndex);
+            }
           }
-        }
-
-        emit(CartLoaded(cart: updatedCart));
-      },
-    );
-  } catch (e) {
-    emit(CartError(cart: state.cart, failure: ExceptionFailure()));
+          emit(CartLoaded(cart: updatedCart, totalItems: _getTotalItems(updatedCart)));
+        },
+      );
+    } catch (e) {
+      emit(CartError(cart: state.cart, failure: ExceptionFailure(), totalItems: state.totalItems));
+    }
   }
-}
 
+  int _getTotalItems(List<CartItem> cart) {
+    return cart.fold(0, (sum, item) => sum + item.quantity);
+  }
 
   void _onClearCart(ClearCart event, Emitter<CartState> emit) async {
     try {
-      emit(const CartLoading(cart: []));
-      emit(const CartLoaded(cart: []));
+      emit(const CartLoading(cart: [], totalItems: 0));
       await _clearCartUseCase(NoParams());
+      emit(const CartLoaded(cart: [], totalItems: 0));
     } catch (e) {
-      emit(CartError(cart: const [], failure: ExceptionFailure()));
+      emit( CartError(cart: [], failure: ExceptionFailure(), totalItems: 0));
     }
   }
 }
