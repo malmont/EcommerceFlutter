@@ -1,3 +1,4 @@
+import 'package:eshop/presentation/blocs/carrier/carrier_info/carrier_fetch_cubit.dart';
 import 'package:eshop/presentation/blocs/home/navbar_cubit.dart';
 import 'package:eshop/presentation/blocs/order/order_fetch/order_fetch_cubit.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +37,7 @@ class _SignInViewState extends State<SignInView> {
         } else if (state is UserLogged) {
           context.read<CartBloc>().add(const GetCart());
           context.read<DeliveryInfoFetchCubit>().fetchDeliveryInfo();
+          context.read<CarrierFetchCubit>().fetchCarrier();
           context.read<OrderFetchCubit>().getOrders();
           context.read<NavbarCubit>().update(0);
           Navigator.of(context).pushNamedAndRemoveUntil(

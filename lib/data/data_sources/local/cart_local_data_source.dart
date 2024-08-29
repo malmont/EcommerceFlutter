@@ -75,7 +75,6 @@ Future<List<CartItemModel>> getCart() async {
   if (jsonString != null) {
     return Future.value(cartItemModelListFromLocalJson(jsonString));
   } else {
-    // Si aucune donnée n'est trouvée, retourner une liste vide au lieu de lancer une exception
     return Future.value([]);
   }
 }

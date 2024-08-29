@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eshop/core/extension/string_extension.dart';
+import 'package:eshop/presentation/blocs/carrier/carrier_info/carrier_fetch_cubit.dart';
 import 'package:eshop/presentation/blocs/cart/cart_bloc.dart';
 import 'package:eshop/presentation/blocs/home/navbar_cubit.dart';
 import 'package:flutter/material.dart';
@@ -107,6 +108,89 @@ class OrderCheckoutView extends StatelessWidget {
                         onPressed: () {
                           Navigator.of(context)
                               .pushNamed(AppRouter.deliveryDetails);
+                        },
+                        icon: const Icon(
+                          Icons.edit,
+                          size: 18,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 12,
+                ),
+                Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 8),
+                      child: OutlineLabelCard(
+                        title: 'Carrier Details',
+                        child:
+                            BlocBuilder<CarrierFetchCubit, CarrierFetchState>(
+                          builder: (context, state) {
+                            if (state.carriers.isNotEmpty &&
+                                state.selectedCarrier != null) {
+                              return Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: CachedNetworkImage(
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                      imageUrl: state.selectedCarrier!.photo,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.only(
+                                        top: 16,
+                                        bottom: 12,
+                                        left: 4,
+                                        right: 10),
+                                    child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            state.selectedCarrier!.name
+                                                .capitalize(),
+                                            style: const TextStyle(
+                                              fontSize: 14,
+                                            ),
+                                          ),
+                                          Text(
+                                            state.selectedCarrier!.description,
+                                            style: const TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ]),
+                                  ),
+                                ],
+                              );
+                            } else {
+                              return Container(
+                                height: 50,
+                                padding: const EdgeInsets.only(
+                                    top: 20, bottom: 8, left: 4),
+                                child: const Text(
+                                  "Please select delivery information",
+                                ),
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    ),
+                    Positioned(
+                      right: -4,
+                      top: 0,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(AppRouter.carrier);
                         },
                         icon: const Icon(
                           Icons.edit,

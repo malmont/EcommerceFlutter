@@ -1,3 +1,5 @@
+import 'package:eshop/presentation/blocs/carrier/carrier_action/carrier_action_cubit.dart';
+import 'package:eshop/presentation/blocs/carrier/carrier_info/carrier_fetch_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:oktoast/oktoast.dart';
@@ -62,6 +64,12 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => di.sl<OrderFetchCubit>()..getOrders(),
+        ),
+         BlocProvider(
+          create: (context) => di.sl<CarrierActionCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => di.sl<CarrierFetchCubit>()..fetchCarrier(),
         ),
       ],
       child: OKToast(

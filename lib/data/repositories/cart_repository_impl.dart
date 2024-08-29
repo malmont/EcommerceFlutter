@@ -25,38 +25,31 @@ class CartRepositoryImpl implements CartRepository {
 @override
 Future<Either<Failure, CartItem>> addToCart(CartItem params) async {
   try {
-    // Récupérer le panier actuel (ou une liste vide si aucun enregistrement n'est trouvé)
     final List<CartItemModel> cartItems = await localDataSource.getCart();
-    
-    // Vérifier si le produit existe déjà dans le panier
     final existingItemIndex = cartItems.indexWhere(
       (item) => item.product.id == params.product.id,
     );
 
     if (existingItemIndex != -1) {
-      // Le produit existe déjà, on incrémente la quantité
       final existingItem = cartItems[existingItemIndex];
       cartItems[existingItemIndex] = existingItem.copyWith(
         quantity: existingItem.quantity + 1,
       );
     } else {
-      // Le produit n'existe pas, on l'ajoute
       cartItems.add(CartItemModel.fromParent(params));
     }
-
-    // Sauvegarde locale après la mise à jour du panier
     await localDataSource.saveCart(cartItems);
-
-    if (await userLocalDataSource.isTokenAvailable()) {
-      final String token = await userLocalDataSource.getToken();
-      final remoteProduct = await remoteDataSource.addToCart(
-        CartItemModel.fromParent(params),
-        token,
-      );
-      return Right(remoteProduct);
-    } else {
-      return Right(params);
-    }
+  return Right(params);
+    // if (await userLocalDataSource.isTokenAvailable()) {
+    //   final String token = await userLocalDataSource.getToken();
+    //   final remoteProduct = await remoteDataSource.addToCart(
+    //     CartItemModel.fromParent(params),
+    //     token,
+    //   );
+    //   return Right(remoteProduct);
+    // } else {
+    //   return Right(params);
+    // }
   } catch (e) {
     // En cas d'erreur, renvoyer un échec de cache
     return Left(CacheFailure());
