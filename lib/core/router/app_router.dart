@@ -1,4 +1,5 @@
 import 'package:eshop/presentation/views/main/home/filter/filter_view.dart';
+import 'package:eshop/presentation/views/main/other/carriers/carrier_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../domain/entities/cart/cart_item.dart';
@@ -9,7 +10,6 @@ import '../../presentation/views/authentication/signup_view.dart';
 import '../../presentation/views/main/main_view.dart';
 import '../../presentation/views/main/other/about/about_view.dart';
 import '../../presentation/views/main/other/delivery_info/delivery_info.dart';
-import '../../presentation/views/main/other/notification/notification_view.dart';
 import '../../presentation/views/main/other/orders/order_view.dart';
 import '../../presentation/views/main/other/profile/profile_screen.dart';
 import '../../presentation/views/main/other/settings/settings_view.dart';
@@ -31,7 +31,7 @@ class AppRouter {
   static const String deliveryDetails = '/delivery-details';
   static const String orders = '/orders';
   static const String settings = '/settings';
-  static const String notifications = '/notifications';
+  static const String carrier = '/carrier';
   static const String about = '/about';
   static const String filter = '/filter';
 
@@ -65,8 +65,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const OrderView());
       case settings:
         return MaterialPageRoute(builder: (_) => const SettingsView());
-      case notifications:
-        return MaterialPageRoute(builder: (_) => const NotificationView());
+      case carrier:
+        return MaterialPageRoute(builder: (_) => const CarrierView());
       case about:
         return MaterialPageRoute(builder: (_) => const AboutView());
       case filter:

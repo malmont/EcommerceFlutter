@@ -146,18 +146,29 @@ class OtherView extends StatelessWidget {
             },
           ),
           const SizedBox(height: 6),
+          BlocBuilder<UserBloc, UserState>(
+            builder: (context, state) {
+              if (state is UserLogged) {
+                return Padding(
+                  padding: const EdgeInsets.only(top: 6),
+                  child: OtherItemCard(
+                    onClick: () {
+                      Navigator.of(context).pushNamed(AppRouter.carrier);
+                    },
+                    title: "Carrier Info",
+                  ),
+                );
+              } else {
+                return const SizedBox();
+              }
+            },
+          ),
+          const SizedBox(height: 6),
           OtherItemCard(
             onClick: () {
               Navigator.of(context).pushNamed(AppRouter.settings);
             },
             title: "Settings",
-          ),
-          const SizedBox(height: 6),
-          OtherItemCard(
-            onClick: () {
-              Navigator.of(context).pushNamed(AppRouter.notifications);
-            },
-            title: "Notifications",
           ),
           const SizedBox(height: 6),
           OtherItemCard(

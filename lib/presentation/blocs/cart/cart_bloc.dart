@@ -40,19 +40,29 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       final result = await _getCachedCartUseCase(NoParams());
       await result.fold(
         (failure) async {
-          emit(CartError(cart: state.cart, failure: failure, totalItems: state.totalItems));
+          emit(CartError(
+              cart: state.cart,
+              failure: failure,
+              totalItems: state.totalItems));
         },
         (cart) async {
           emit(CartLoaded(cart: cart, totalItems: _getTotalItems(cart)));
           final syncResult = await _syncCartUseCase(NoParams());
           syncResult.fold(
-            (failure) => emit(CartError(cart: cart, failure: failure, totalItems: _getTotalItems(cart))),
-            (syncedCart) => emit(CartLoaded(cart: syncedCart, totalItems: _getTotalItems(syncedCart))),
+            (failure) => emit(CartError(
+                cart: cart,
+                failure: failure,
+                totalItems: _getTotalItems(cart))),
+            (syncedCart) => emit(CartLoaded(
+                cart: syncedCart, totalItems: _getTotalItems(syncedCart))),
           );
         },
       );
     } catch (e) {
-      emit(CartError(failure: ExceptionFailure(), cart: state.cart, totalItems: state.totalItems));
+      emit(CartError(
+          failure: ExceptionFailure(),
+          cart: state.cart,
+          totalItems: state.totalItems));
     }
   }
 
@@ -63,20 +73,30 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       final result = await _addCartUseCase(event.cartItem);
       await result.fold(
         (failure) async {
-          emit(CartError(cart: state.cart, failure: failure, totalItems: state.totalItems));
+          emit(CartError(
+              cart: state.cart,
+              failure: failure,
+              totalItems: state.totalItems));
         },
         (_) async {
           final updatedCartItems = await _getCachedCartUseCase(NoParams());
           updatedCartItems.fold(
-            (failure) => emit(CartError(cart: state.cart, failure: failure, totalItems: state.totalItems)),
+            (failure) => emit(CartError(
+                cart: state.cart,
+                failure: failure,
+                totalItems: state.totalItems)),
             (cartItems) {
-              emit(CartLoaded(cart: cartItems, totalItems: _getTotalItems(cartItems)));
+              emit(CartLoaded(
+                  cart: cartItems, totalItems: _getTotalItems(cartItems)));
             },
           );
         },
       );
     } catch (e) {
-      emit(CartError(cart: state.cart, failure: ExceptionFailure(), totalItems: state.totalItems));
+      emit(CartError(
+          cart: state.cart,
+          failure: ExceptionFailure(),
+          totalItems: state.totalItems));
     }
   }
 
@@ -86,7 +106,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
       final result = await _removeCartUseCase(event.cartItem);
       result.fold(
-        (failure) => emit(CartError(cart: state.cart, failure: failure, totalItems: state.totalItems)),
+        (failure) => emit(CartError(
+            cart: state.cart, failure: failure, totalItems: state.totalItems)),
         (_) {
           final updatedCart = List<CartItem>.from(state.cart);
           final existingItemIndex = updatedCart.indexWhere(
@@ -103,11 +124,15 @@ class CartBloc extends Bloc<CartEvent, CartState> {
               updatedCart.removeAt(existingItemIndex);
             }
           }
-          emit(CartLoaded(cart: updatedCart, totalItems: _getTotalItems(updatedCart)));
+          emit(CartLoaded(
+              cart: updatedCart, totalItems: _getTotalItems(updatedCart)));
         },
       );
     } catch (e) {
-      emit(CartError(cart: state.cart, failure: ExceptionFailure(), totalItems: state.totalItems));
+      emit(CartError(
+          cart: state.cart,
+          failure: ExceptionFailure(),
+          totalItems: state.totalItems));
     }
   }
 
@@ -121,7 +146,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       await _clearCartUseCase(NoParams());
       emit(const CartLoaded(cart: [], totalItems: 0));
     } catch (e) {
-      emit( CartError(cart: [], failure: ExceptionFailure(), totalItems: 0));
+      emit(CartError(cart: [], failure: ExceptionFailure(), totalItems: 0));
     }
   }
 }

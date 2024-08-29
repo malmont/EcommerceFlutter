@@ -1,9 +1,20 @@
+import 'package:eshop/data/data_sources/local/carrier_local_data_source.dart';
+import 'package:eshop/data/data_sources/remote/carrier_remote_data_source.dart';
+import 'package:eshop/data/repositories/carrier_repository_impl.dart';
+import 'package:eshop/domain/repositories/carrier_repository.dart';
+import 'package:eshop/domain/usecases/carrier/add_carrier_usecase.dart';
+import 'package:eshop/domain/usecases/carrier/get_cached_carrier_usecase.dart';
+import 'package:eshop/domain/usecases/carrier/get_remote_carrier_usecase.dart';
+import 'package:eshop/domain/usecases/carrier/get_select_carrier_usecase.dart';
+import 'package:eshop/domain/usecases/carrier/select_carrier_usecase.dart';
 import 'package:eshop/domain/usecases/cart/remove_cart_usecase.dart';
 import 'package:eshop/domain/usecases/delivery_info/clear_local_delivery_info_usecase.dart';
 import 'package:eshop/domain/usecases/delivery_info/edit_delivery_info_usecase.dart';
 import 'package:eshop/domain/usecases/delivery_info/get_selected_delivery_info_usecase.dart';
 import 'package:eshop/domain/usecases/delivery_info/select_delivery_info_usecase.dart';
 import 'package:eshop/domain/usecases/order/clear_local_order_usecase.dart';
+import 'package:eshop/presentation/blocs/carrier/carrier_action/carrier_action_cubit.dart';
+import 'package:eshop/presentation/blocs/carrier/carrier_info/carrier_fetch_cubit.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:http/http.dart' as http;
@@ -173,6 +184,38 @@ Future<void> init() async {
   sl.registerLazySingleton<DeliveryInfoLocalDataSource>(
     () => DeliveryInfoLocalDataSourceImpl(sharedPreferences: sl()),
   );
+
+   //Features - Carrier
+  // Bloc
+  sl.registerFactory(
+    () => CarrierActionCubit(sl()),
+  );
+  sl.registerFactory(
+    () => CarrierFetchCubit(sl(), sl(), sl()),
+  );
+  // Use cases
+  sl.registerLazySingleton(() => GetRemoteCarrierUsecase(sl()));
+  sl.registerLazySingleton(() => GetCachedCarrierUsecase(sl()));
+  // sl.registerLazySingleton(() => AddCarrierUsecase(sl()));
+  sl.registerLazySingleton(() => SelectCarrierUsecase(sl()));
+  sl.registerLazySingleton(() => GetSelectCarrierUsecase(sl()));
+  // Repository
+  sl.registerLazySingleton<CarrierRepository>(
+    () => CarrierRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+      networkInfo: sl(),
+      userLocalDataSource: sl(),
+    ),
+  );
+  // Data sources
+  sl.registerLazySingleton<CarrierRemoteDataSource>(
+    () => CarrierRemoteDataSourceImpl(client: sl()),
+  );
+  sl.registerLazySingleton<CarrierLocalDataSource>(
+    () => CarrierLocalDataSourceImpl(sharedPreferences: sl()),
+  );
+
 
   //Features - Order
   // Bloc
