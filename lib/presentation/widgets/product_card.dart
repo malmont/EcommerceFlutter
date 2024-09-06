@@ -55,14 +55,6 @@ class ProductCard extends StatelessWidget {
                 color: Theme.of(context).shadowColor.withOpacity(0.15),
               ),
             ),
-            // Card(
-            //   color: Colors.white,
-            //   elevation: 0,
-            //   margin: const EdgeInsets.all(4),
-            //   clipBehavior: Clip.antiAlias,
-            //   shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(12),
-            //   ),
             child: product == null
                 ? Material(
                     child: GridTile(

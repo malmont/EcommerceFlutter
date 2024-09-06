@@ -17,39 +17,38 @@ class GetProductUseCase
     return await repository.getProducts(params);
   }
 }
-
 class FilterProductParams {
   final String? keyword;
   final List<Category> categories;
   final double minPrice;
   final double maxPrice;
-  final int? limit; // Ceci représente la page actuelle
-  final int? pageSize;
+  final int? limit;  // Utilisé comme numéro de page
+  final int? pageSize;  // Taille des résultats par page
 
   const FilterProductParams({
     this.keyword = '',
     this.categories = const [],
     this.minPrice = 0,
     this.maxPrice = 10000,
-    this.limit = 1,  // Page commence à 1
-    this.pageSize = 10,
+    this.limit = 1,  // La page commence à 1
+    this.pageSize = 10,  // Par défaut, 10 éléments par page
   });
 
+  // Méthode copyWith pour créer une nouvelle instance en modifiant certains champs
   FilterProductParams copyWith({
-    int? skip,
     String? keyword,
     List<Category>? categories,
     double? minPrice,
     double? maxPrice,
-    int? limit,
-    int? pageSize,
+    int? limit,  // Pour gérer l'incrémentation de la page
+    int? pageSize,  // Taille de la page si besoin
   }) =>
       FilterProductParams(
         keyword: keyword ?? this.keyword,
         categories: categories ?? this.categories,
         minPrice: minPrice ?? this.minPrice,
         maxPrice: maxPrice ?? this.maxPrice,
-        limit: limit ?? this.limit,  // Assurez-vous d'utiliser limit ici
-        pageSize: pageSize ?? this.pageSize,
+        limit: limit ?? this.limit,  // Utiliser le limit pour gérer la page
+        pageSize: pageSize ?? this.pageSize,  // Garder la taille de page
       );
 }

@@ -4,8 +4,17 @@ abstract class ProductState extends Equatable {
   final List<Product> products;
   final PaginationMetaData metaData;
   final FilterProductParams params;
-  const ProductState(
-      {required this.products, required this.metaData, required this.params});
+  final Variant? selectedVariant;  // Ajout de la gestion du variant sélectionné
+
+  const ProductState({
+    required this.products,
+    required this.metaData,
+    required this.params,
+    this.selectedVariant,  // Le variant sélectionné est optionnel
+  });
+
+  @override
+  List<Object?> get props => [products, metaData, params, selectedVariant];
 }
 
 class ProductInitial extends ProductState {
@@ -14,8 +23,6 @@ class ProductInitial extends ProductState {
     required super.metaData,
     required super.params,
   });
-  @override
-  List<Object> get props => [];
 }
 
 class ProductEmpty extends ProductState {
@@ -24,8 +31,6 @@ class ProductEmpty extends ProductState {
     required super.metaData,
     required super.params,
   });
-  @override
-  List<Object> get props => [];
 }
 
 class ProductLoading extends ProductState {
@@ -33,9 +38,8 @@ class ProductLoading extends ProductState {
     required super.products,
     required super.metaData,
     required super.params,
-  });
-  @override
-  List<Object> get props => [];
+    Variant? selectedVariant,  // Conserver l'état du variant sélectionné pendant le chargement
+  }) : super(selectedVariant: selectedVariant);  // Passer directement le variant
 }
 
 class ProductLoaded extends ProductState {
@@ -43,9 +47,8 @@ class ProductLoaded extends ProductState {
     required super.products,
     required super.metaData,
     required super.params,
-  });
-  @override
-  List<Object> get props => [products];
+    Variant? selectedVariant,  // Inclure le variant sélectionné dans l'état ProductLoaded
+  }) : super(selectedVariant: selectedVariant);  // Pas besoin de passer "products" deux fois
 }
 
 class ProductError extends ProductState {
@@ -55,7 +58,9 @@ class ProductError extends ProductState {
     required super.metaData,
     required super.params,
     required this.failure,
-  });
+    Variant? selectedVariant,  // Conserver l'état du variant sélectionné lors d'une erreur
+  }) : super(selectedVariant: selectedVariant);
+
   @override
-  List<Object> get props => [];
+  List<Object> get props => [failure];
 }

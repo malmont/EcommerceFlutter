@@ -127,7 +127,7 @@ class _CartViewState extends State<CartView> {
                                   style: const TextStyle(fontSize: 16),
                                 ),
                                 Text(
-                                  '\$${state.cart.fold(0.0, (previousValue, element) => (element.product.price * element.quantity) + previousValue)}',
+                                  '\$${(state.cart.fold(0.0, (previousValue, element) => (element.product.price * element.quantity) + previousValue) / 100).toStringAsFixed(2)}',
                                   style: const TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.w500),

@@ -24,22 +24,33 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   final ScrollController scrollController = ScrollController();
 
-  void _scrollListener() {
-    double maxScroll = scrollController.position.maxScrollExtent;
-    double currentScroll = scrollController.position.pixels;
-    double scrollPercentage = 0.7;
-    if (currentScroll > (maxScroll * scrollPercentage)) {
-      if (context.read<ProductBloc>().state is ProductLoaded) {
-        context.read<ProductBloc>().add(const GetMoreProducts());
-      }
+void _scrollListener() {
+  double maxScroll = scrollController.position.maxScrollExtent;
+  double currentScroll = scrollController.position.pixels;
+  double scrollPercentage = 0.7;
+
+  // Vérifier si le défilement est proche du bas et si le bloc n'est pas déjà en train de charger
+  if (currentScroll > (maxScroll * scrollPercentage)) {
+    if (context.read<ProductBloc>().state is ProductLoaded &&
+        !context.read<ProductBloc>().isFetching) {
+      print("Déclenchement de GetMoreProducts");
+      context.read<ProductBloc>().add(const GetMoreProducts());
     }
   }
+}
 
-  @override
-  void initState() {
-    scrollController.addListener(_scrollListener);
-    super.initState();
-  }
+@override
+void initState() {
+  scrollController.addListener(_scrollListener);
+  super.initState();
+}
+
+@override
+void dispose() {
+  scrollController.removeListener(_scrollListener);
+  scrollController.dispose(); // Dispose of controller to prevent memory leaks
+  super.dispose();
+}
 
   @override
   Widget build(BuildContext context) {

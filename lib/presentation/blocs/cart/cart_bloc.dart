@@ -13,6 +13,7 @@ import '../../../domain/usecases/cart/sync_cart_usecase.dart';
 part 'cart_event.dart';
 part 'cart_state.dart';
 
+
 class CartBloc extends Bloc<CartEvent, CartState> {
   final GetCachedCartUseCase _getCachedCartUseCase;
   final AddCartUseCase _addCartUseCase;
@@ -110,8 +111,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
             cart: state.cart, failure: failure, totalItems: state.totalItems)),
         (_) {
           final updatedCart = List<CartItem>.from(state.cart);
+
           final existingItemIndex = updatedCart.indexWhere(
-            (item) => item.product.id == event.cartItem.product.id,
+            (item) =>
+                item.product.id == event.cartItem.product.id &&
+                item.variant.id == event.cartItem.variant.id,
           );
 
           if (existingItemIndex != -1) {
@@ -124,6 +128,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
               updatedCart.removeAt(existingItemIndex);
             }
           }
+
           emit(CartLoaded(
               cart: updatedCart, totalItems: _getTotalItems(updatedCart)));
         },
