@@ -9,6 +9,7 @@ import '../data_sources/local/user_local_data_source.dart';
 import '../data_sources/remote/cart_remote_data_source.dart';
 import '../models/cart/cart_item_model.dart';
 
+
 class CartRepositoryImpl implements CartRepository {
   final CartRemoteDataSource remoteDataSource;
   final CartLocalDataSource localDataSource;
@@ -20,48 +21,41 @@ class CartRepositoryImpl implements CartRepository {
     required this.localDataSource,
     required this.userLocalDataSource,
     required this.networkInfo,
-  }); 
+  });
 
-@override
-Future<Either<Failure, CartItem>> addToCart(CartItem params) async {
-  try {
-    final List<CartItemModel> cartItems = await localDataSource.getCart();
-    final existingItemIndex = cartItems.indexWhere(
-      (item) => item.product.id == params.product.id,
-    );
-
-    if (existingItemIndex != -1) {
-      final existingItem = cartItems[existingItemIndex];
-      cartItems[existingItemIndex] = existingItem.copyWith(
-        quantity: existingItem.quantity + 1,
+  @override
+  Future<Either<Failure, CartItem>> addToCart(CartItem params) async {
+    try {
+      final List<CartItemModel> cartItems = await localDataSource.getCart();
+      
+      // Comparer à la fois product.id et variant.id pour identifier un élément unique
+      final existingItemIndex = cartItems.indexWhere(
+        (item) => item.product.id == params.product.id && item.variant.id == params.variant.id,
       );
-    } else {
-      cartItems.add(CartItemModel.fromParent(params));
+
+      if (existingItemIndex != -1) {
+        final existingItem = cartItems[existingItemIndex];
+        cartItems[existingItemIndex] = existingItem.copyWith(
+          quantity: existingItem.quantity + 1,
+        );
+      } else {
+        cartItems.add(CartItemModel.fromParent(params));
+      }
+      await localDataSource.saveCart(cartItems);
+      return Right(params);
+    } catch (e) {
+      return Left(CacheFailure());
     }
-    await localDataSource.saveCart(cartItems);
-  return Right(params);
-    // if (await userLocalDataSource.isTokenAvailable()) {
-    //   final String token = await userLocalDataSource.getToken();
-    //   final remoteProduct = await remoteDataSource.addToCart(
-    //     CartItemModel.fromParent(params),
-    //     token,
-    //   );
-    //   return Right(remoteProduct);
-    // } else {
-    //   return Right(params);
-    // }
-  } catch (e) {
-    // En cas d'erreur, renvoyer un échec de cache
-    return Left(CacheFailure());
   }
-}
-@override
+
+  @override
   Future<Either<Failure, void>> removeFromCart(CartItem params) async {
     try {
       final List<CartItemModel> cartItems = await localDataSource.getCart();
       
+      // Comparer à la fois product.id et variant.id pour identifier un élément unique
       final existingItemIndex = cartItems.indexWhere(
-        (item) => item.product.id == params.product.id,
+        (item) => item.product.id == params.product.id && item.variant.id == params.variant.id,
       );
 
       if (existingItemIndex != -1) {
@@ -74,16 +68,15 @@ Future<Either<Failure, CartItem>> addToCart(CartItem params) async {
           cartItems.removeAt(existingItemIndex);
         }
 
-        // Sauvegarde locale après la suppression
         await localDataSource.saveCart(cartItems);
 
-        if (await userLocalDataSource.isTokenAvailable()) {
-          final String token = await userLocalDataSource.getToken();
-          await remoteDataSource.removeFromCart(
-            CartItemModel.fromParent(params),
-            token,
-          );
-        }
+        // if (await userLocalDataSource.isTokenAvailable()) {
+        //   final String token = await userLocalDataSource.getToken();
+        //   await remoteDataSource.removeFromCart(
+        //     CartItemModel.fromParent(params),
+        //     token,
+        //   );
+        // }
 
         return const Right(null);
       } else {
@@ -94,14 +87,13 @@ Future<Either<Failure, CartItem>> addToCart(CartItem params) async {
     }
   }
 
-
   @override
   Future<Either<Failure, List<CartItem>>> getCachedCart() async {
     try {
       final localProducts = await localDataSource.getCart();
       return Right(localProducts);
-    } on Failure catch (failure) {
-      return Left(failure);
+    } catch (failure) {
+      return Left(CacheFailure());
     }
   }
 
@@ -121,7 +113,7 @@ Future<Either<Failure, CartItem>> addToCart(CartItem params) async {
           );
           await localDataSource.saveCart(syncedResult);
           return Right(syncedResult);
-        } on Failure catch (failure) {
+        } on Failure catch (failure){
           return Left(failure);
         }
       } else {

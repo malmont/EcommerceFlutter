@@ -1,4 +1,5 @@
 import 'package:eshop/core/error/failures.dart';
+import 'package:eshop/data/models/order/order_detail_response_model.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../core/error/exceptions.dart';
@@ -6,7 +7,7 @@ import '../../../core/constant/strings.dart';
 import '../../models/order/order_details_model.dart';
 
 abstract class OrderRemoteDataSource {
-  Future<OrderDetailsModel> addOrder(OrderDetailsModel params, String token);
+  Future<OrderDetailResponseModel> addOrder(OrderDetailResponseModel params, String token);
   Future<List<OrderDetailsModel>> getOrders(String token);
 }
 
@@ -15,17 +16,17 @@ class OrderRemoteDataSourceSourceImpl implements OrderRemoteDataSource {
   OrderRemoteDataSourceSourceImpl({required this.client});
 
   @override
-  Future<OrderDetailsModel> addOrder(params, token) async {
+  Future<OrderDetailResponseModel> addOrder(params, token) async {
     final response = await client.post(
-      Uri.parse('$baseUrl/orders'),
+      Uri.parse('https://backend-strapi.online/jeesign/api/order/create'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
-      body: orderDetailsModelToJson(params),
+      body: orderDetailResponseModelToJson(params),
     );
     if (response.statusCode == 200) {
-      return orderDetailsModelFromJson(response.body);
+      return orderDetailResponseModelFromJson(response.body);
     } else {
       throw ServerException();
     }

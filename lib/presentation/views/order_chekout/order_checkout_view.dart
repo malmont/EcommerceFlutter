@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eshop/core/extension/string_extension.dart';
+import 'package:eshop/domain/entities/order/order_detail_response.dart';
 import 'package:eshop/presentation/blocs/carrier/carrier_info/carrier_fetch_cubit.dart';
 import 'package:eshop/presentation/blocs/cart/cart_bloc.dart';
 import 'package:eshop/presentation/blocs/home/navbar_cubit.dart';
@@ -23,6 +24,7 @@ class OrderCheckoutView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int deliveryCharge = 0;
     return BlocProvider(
       create: (context) => di.sl<OrderAddCubit>(),
       child: BlocListener<OrderAddCubit, OrderAddState>(
@@ -131,6 +133,7 @@ class OrderCheckoutView extends StatelessWidget {
                           builder: (context, state) {
                             if (state.carriers.isNotEmpty &&
                                 state.selectedCarrier != null) {
+                              deliveryCharge = state.selectedCarrier!.price;
                               return Row(
                                 children: [
                                   Padding(
@@ -249,7 +252,8 @@ class OrderCheckoutView extends StatelessWidget {
                                           Row(
                                             children: [
                                               Text(
-                                                  '\$${product.product.price.toStringAsFixed(2)}'),
+                                                '\$${(product.product.price / 100).toStringAsFixed(2)}',
+                                              ),
                                               const SizedBox(
                                                 width: 10,
                                               ),
@@ -259,6 +263,81 @@ class OrderCheckoutView extends StatelessWidget {
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.w600,
                                                 ),
+                                              ),
+                                              const SizedBox(
+                                                width: 10,
+                                              ),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  // Affichage de la taille
+                                                  Wrap(
+                                                    children: [
+                                                      Container(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .symmetric(
+                                                                horizontal: 5,
+                                                                vertical: 2),
+                                                        margin: const EdgeInsets
+                                                            .all(4),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          border: Border.all(
+                                                            color: Colors.black,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(8),
+                                                        ),
+                                                        child: Text(
+                                                          product
+                                                              .variant.size.name
+                                                              .substring(0, 1),
+                                                          style:
+                                                              const TextStyle(
+                                                            fontSize: 10,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                        ),
+                                                      )
+                                                    ],
+                                                  ),
+                                                  // Affichage de la couleur
+                                                  Wrap(
+                                                    children: [
+                                                      Container(
+                                                        margin: const EdgeInsets
+                                                            .all(4),
+                                                        width: 20,
+                                                        height: 20,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          color: Color(int.parse(
+                                                                  product
+                                                                      .variant
+                                                                      .color
+                                                                      .codeHexa
+                                                                      .replaceFirst(
+                                                                          '#',
+                                                                          ''),
+                                                                  radix: 16) +
+                                                              0xFF000000), // Conversion du code hexadécimal en couleur
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.black,
+                                                              width: 2),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
                                               ),
                                             ],
                                           )
@@ -302,23 +381,53 @@ class OrderCheckoutView extends StatelessWidget {
                           children: [
                             const Text("Total Price"),
                             Text(
-                              '\$${items.fold(0.0, (previousValue, element) => (element.product.price * element.quantity) + previousValue)}',
-                            ),
+                                '\$${(items.fold(0.0, (previousValue, element) => ((element.product.price * element.quantity) + previousValue)) / 100).toStringAsFixed(2)}'),
                           ],
                         ),
-                        const Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [Text("Delivery Charge"), Text("\$4.99")],
+                        BlocBuilder<CarrierFetchCubit, CarrierFetchState>(
+                          builder: (context, state) {
+                            if (state.carriers.isNotEmpty &&
+                                state.selectedCarrier != null) {
+                              deliveryCharge = state.selectedCarrier!
+                                  .price; // Stocker la valeur de livraison
+                            } else {
+                              deliveryCharge =
+                                  499; // Valeur par défaut si aucun transporteur n'est sélectionné
+                            }
+                            return Column(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text("Delivery Charge"),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          '\$${(deliveryCharge / 100).toStringAsFixed(2)}', // Affichage correct du montant
+                                        ),
+                                      ],
+                                    )
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 4,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text("Total"),
+                                    Text(
+                                        '\$${((items.fold(0.0, (previousValue, element) => (((element.product.price * element.quantity) + previousValue)) + deliveryCharge) / 100)).toStringAsFixed(2)}')
+                                  ],
+                                )
+                              ],
+                            );
+                          },
                         ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text("Total"),
-                            Text(
-                              '\$${items.fold(0.0, (previousValue, element) => (element.product.price * element.quantity) + previousValue) + 4.99}',
-                            )
-                          ],
-                        )
                       ],
                     ),
                   ),
@@ -339,23 +448,40 @@ class OrderCheckoutView extends StatelessWidget {
                             .selectedDeliveryInformation ==
                         null) {
                       EasyLoading.showError(
-                          "Error \nPlease select delivery add your delivery information");
+                          "Error \nPlease select delivery and add your delivery information");
                     } else {
-                      context.read<OrderAddCubit>().addOrder(OrderDetails(
-                          id: '',
-                          orderItems: items
-                              .map((item) => OrderItem(
-                                    id: '',
-                                    product: item.product,
-                                    price: item.product.price,
-                                    quantity: 1,
-                                  ))
-                              .toList(),
-                          deliveryInfo: context
-                              .read<DeliveryInfoFetchCubit>()
-                              .state
-                              .selectedDeliveryInformation!,
-                          discount: 0));
+                      context.read<OrderAddCubit>().addOrder(
+                          OrderDetailResponse(
+                              orderSource: 3,
+                              carrierId: int.parse(context
+                                  .read<DeliveryInfoFetchCubit>()
+                                  .state
+                                  .selectedDeliveryInformation!
+                                  .id),
+                              paymentMethod: 1,
+                              addressId: int.parse(context
+                                  .read<DeliveryInfoFetchCubit>()
+                                  .state
+                                  .selectedDeliveryInformation!
+                                  .id),
+                              typeOrder: 1,
+                              items: items
+                                  .map((e) => OrderItemDetail(
+                                        productVariantId: e.variant.id,
+                                        quantity: e.quantity,
+                                      ))
+                                  .toList()));
+
+                      context.read<OrderAddCubit>().stream.listen((state) {
+                        if (state is OrderAddSuccess) {
+                          EasyLoading.showSuccess("Order Placed Successfully");
+                          context.read<CartBloc>().add(const ClearCart());
+                          Navigator.of(context).pushNamedAndRemoveUntil(
+                              AppRouter.home, (Route<dynamic> route) => false);
+                        } else if (state is OrderAddFail) {
+                          EasyLoading.showError("Error placing order");
+                        }
+                      });
                     }
                   },
                   titleText: 'Confirm',

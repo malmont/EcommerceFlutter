@@ -29,6 +29,7 @@ class RemoveProduct extends CartEvent {
 
 class ClearCart extends CartEvent {
   const ClearCart();
+  
 
   @override
   List<Object> get props => [];

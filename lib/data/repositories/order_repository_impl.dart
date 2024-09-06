@@ -1,5 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:eshop/core/usecases/usecase.dart';
+import 'package:eshop/data/models/order/order_detail_response_model.dart';
+import 'package:eshop/domain/entities/order/order_detail_response.dart';
 
 import '../../../../core/error/failures.dart';
 import '../../core/network/network_info.dart';
@@ -24,11 +26,11 @@ class OrderRepositoryImpl implements OrderRepository {
   });
 
   @override
-  Future<Either<Failure, OrderDetails>> addOrder(OrderDetails params) async {
+  Future<Either<Failure, OrderDetailResponse>> addOrder(OrderDetailResponse params) async {
     if (await userLocalDataSource.isTokenAvailable()) {
       final String token = await userLocalDataSource.getToken();
       final remoteProduct = await remoteDataSource.addOrder(
-        OrderDetailsModel.fromEntity(params),
+        OrderDetailResponseModel.fromEntity(params),
         token,
       );
       return Right(remoteProduct);
