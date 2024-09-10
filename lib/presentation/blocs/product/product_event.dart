@@ -21,14 +21,17 @@ class GetMoreProducts extends ProductEvent {
 class SelectVariantEvent extends ProductEvent {
   final String color;
   final String size;
+  final String productId; // Ajoute l'ID du produit
 
-  const SelectVariantEvent({required this.color, required this.size});
-
+  const SelectVariantEvent({
+    required this.color,
+    required this.size,
+    required this.productId, // Requis pour l'événement
+  });
 
   @override
-  List<Object> get props => [color, size];
+  List<Object> get props => [color, size, productId];
 }
-
 class ResetVariantEvent extends ProductEvent {
   const ResetVariantEvent();
 

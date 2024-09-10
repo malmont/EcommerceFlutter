@@ -173,6 +173,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                 onTap: () {
                                   // Envoyer l'événement de sélection de taille
                                   productBloc.add(SelectVariantEvent(
+                                    productId:  widget.product.id,
                                     color: selectedVariant?.color.name ??
                                         variant.color.name,
                                     size: variant.size.name,
@@ -213,6 +214,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                 onTap: () {
                                   // Envoyer l'événement au bloc lors de la sélection de la couleur
                                   productBloc.add(SelectVariantEvent(
+                                    productId: widget.product.id,
                                     color: color.name,
                                     size: selectedVariant?.size.name ??
                                         widget.product.variants.first.size.name,

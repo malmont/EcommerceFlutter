@@ -22,33 +22,33 @@ class FilterProductParams {
   final List<Category> categories;
   final double minPrice;
   final double maxPrice;
-  final int? limit;  // Utilisé comme numéro de page
-  final int? pageSize;  // Taille des résultats par page
+  final int? limit; 
+  final int? pageSize; 
 
   const FilterProductParams({
     this.keyword = '',
     this.categories = const [],
     this.minPrice = 0,
     this.maxPrice = 10000,
-    this.limit = 1,  // La page commence à 1
-    this.pageSize = 10,  // Par défaut, 10 éléments par page
+    this.limit = 1, 
+    this.pageSize = 10, 
   });
 
-  // Méthode copyWith pour créer une nouvelle instance en modifiant certains champs
+
   FilterProductParams copyWith({
     String? keyword,
     List<Category>? categories,
     double? minPrice,
     double? maxPrice,
-    int? limit,  // Pour gérer l'incrémentation de la page
-    int? pageSize,  // Taille de la page si besoin
+    int? limit, 
+    int? pageSize, 
   }) =>
       FilterProductParams(
         keyword: keyword ?? this.keyword,
         categories: categories ?? this.categories,
         minPrice: minPrice ?? this.minPrice,
         maxPrice: maxPrice ?? this.maxPrice,
-        limit: limit ?? this.limit,  // Utiliser le limit pour gérer la page
-        pageSize: pageSize ?? this.pageSize,  // Garder la taille de page
+        limit: limit ?? this.limit, 
+        pageSize: pageSize ?? this.pageSize,  
       );
 }

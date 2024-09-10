@@ -453,16 +453,16 @@ class OrderCheckoutView extends StatelessWidget {
                       context.read<OrderAddCubit>().addOrder(
                           OrderDetailResponse(
                               orderSource: 3,
-                              carrierId: int.parse(context
+                              addressId: int.parse(context
                                   .read<DeliveryInfoFetchCubit>()
                                   .state
                                   .selectedDeliveryInformation!
                                   .id),
                               paymentMethod: 1,
-                              addressId: int.parse(context
-                                  .read<DeliveryInfoFetchCubit>()
+                              carrierId: int.parse(context
+                                  .read<CarrierFetchCubit>()
                                   .state
-                                  .selectedDeliveryInformation!
+                                  .selectedCarrier!
                                   .id),
                               typeOrder: 1,
                               items: items
