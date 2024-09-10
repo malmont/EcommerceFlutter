@@ -9,7 +9,6 @@ import '../../../domain/usecases/product/get_product_usecase.dart';
 
 part 'product_event.dart';
 part 'product_state.dart';
-
 class ProductBloc extends Bloc<ProductEvent, ProductState> {
   final GetProductUseCase _getProductUseCase;
   int currentPage = 1; // Suivi de la page actuelle
@@ -20,7 +19,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
           products: const [],
           params: const FilterProductParams(),
           metaData: PaginationMetaData(
-            pageSize: 20,
+            pageSize: 10,
             limit: 0,
             total: 0,
           ),
@@ -33,8 +32,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
   // Chargement initial des produits
   void _onLoadProducts(GetProducts event, Emitter<ProductState> emit) async {
-    currentPage = 1; // Réinitialiser la page à 1 lors d'un nouveau chargement
-    isFetching = true; // Empêcher d'autres requêtes pendant le chargement
+    currentPage = 1;
+    isFetching = true; 
     try {
       emit(ProductLoading(
         products: const [],
@@ -43,8 +42,8 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
       ));
 
       final result = await _getProductUseCase(event.params.copyWith(
-              limit: currentPage) // Utiliser currentPage comme limite/page
-          );
+              limit: currentPage, pageSize: state.metaData.pageSize)
+      );
 
       result.fold(
         (failure) {
@@ -101,10 +100,10 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
             params: state.params,
           ));
 
-          // Charger la page suivante en utilisant currentPage
+          // Charger la page suivante en utilisant currentPage et pageSize depuis metadata
           final result = await _getProductUseCase(
             state.params.copyWith(
-                limit: currentPage), // Utiliser currentPage pour la pagination
+                limit: currentPage, pageSize: state.metaData.pageSize)
           );
 
           result.fold(
@@ -123,7 +122,7 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
 
               currentPage++; // Incrémenter la page pour la prochaine requête
               emit(ProductLoaded(
-                metaData: productResponse.paginationMetaData,
+                metaData: productResponse.paginationMetaData, // Mettre à jour les metadata
                 products: updatedProducts,
                 params: state.params
                     .copyWith(limit: currentPage), // Mettre à jour la page
@@ -147,22 +146,26 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
   void _onSelectVariant(SelectVariantEvent event, Emitter<ProductState> emit) {
     final state = this.state;
     if (state is ProductLoaded) {
-      // Rechercher le variant sélectionné
-      final Variant selectedVariant =
-          state.products.expand((product) => product.variants).firstWhere(
-                (variant) =>
-                    variant.color.name == event.color &&
-                    variant.size.name == event.size,
-                orElse: () => throw Exception(
-                    'Variant not found'), // Lever une exception si aucun variant n'est trouvé
-              );
+      // Rechercher le produit en question grâce à l'ID reçu via l'événement
+      final Product selectedProduct = state.products.firstWhere(
+        (product) => product.id == event.productId, // Utilise l'ID du produit de l'événement
+        orElse: () => throw Exception('Product not found'),
+      );
+
+      // Rechercher le variant sélectionné parmi les variants de ce produit
+      final Variant selectedVariant = selectedProduct.variants.firstWhere(
+        (variant) =>
+            variant.color.name == event.color &&
+            variant.size.name == event.size,
+        orElse: () => throw Exception('Variant not found'),
+      );
 
       // Mettre à jour l'état avec le variant sélectionné
       emit(ProductLoaded(
         products: state.products,
         params: state.params,
         metaData: state.metaData,
-        selectedVariant: selectedVariant, // Le variant trouvé est passé ici
+        selectedVariant: selectedVariant,
       ));
     }
   }

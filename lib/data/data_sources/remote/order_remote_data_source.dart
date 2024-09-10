@@ -25,7 +25,7 @@ class OrderRemoteDataSourceSourceImpl implements OrderRemoteDataSource {
       },
       body: orderDetailResponseModelToJson(params),
     );
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200  || response.statusCode == 201) {
       return orderDetailResponseModelFromJson(response.body);
     } else {
       throw ServerException();

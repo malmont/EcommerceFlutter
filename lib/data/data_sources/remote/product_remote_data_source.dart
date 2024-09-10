@@ -18,14 +18,13 @@ class ProductRemoteDataSourceImpl implements ProductRemoteDataSource {
 
   @override
   Future<ProductResponseModel> getProducts(FilterProductParams params) {
-    // Si 'limit' est utilisé comme numéro de page, nous nous assurons qu'il commence à 1
+
     final int page = params.limit != null && params.limit! > 0 ? params.limit! : 1;
     final int pageSize = params.pageSize != null && params.pageSize! > 0 ? params.pageSize! : 10;
     
-    // Encode les catégories en chaîne de caractères JSON
+
     final categoriesParam = Uri.encodeComponent(jsonEncode(params.categories.map((e) => e.id).toList()));
 
-    // Construire l'URL de la requête avec la page et la taille de la page
     final url = 'https://backend-strapi.online/jeesign/api/products/by-category'
                 '?keyword=${Uri.encodeComponent(params.keyword ?? '')}'
                 '&page=$page'

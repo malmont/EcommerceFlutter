@@ -20,37 +20,43 @@ class HomeView extends StatefulWidget {
   @override
   State<HomeView> createState() => _HomeViewState();
 }
-
 class _HomeViewState extends State<HomeView> {
   final ScrollController scrollController = ScrollController();
 
-void _scrollListener() {
-  double maxScroll = scrollController.position.maxScrollExtent;
-  double currentScroll = scrollController.position.pixels;
-  double scrollPercentage = 0.7;
+  void _scrollListener() {
+    double maxScroll = scrollController.position.maxScrollExtent;
+    double currentScroll = scrollController.position.pixels;
+    double scrollPercentage = 0.7;
 
-  // Vérifier si le défilement est proche du bas et si le bloc n'est pas déjà en train de charger
-  if (currentScroll > (maxScroll * scrollPercentage)) {
-    if (context.read<ProductBloc>().state is ProductLoaded &&
-        !context.read<ProductBloc>().isFetching) {
-      print("Déclenchement de GetMoreProducts");
-      context.read<ProductBloc>().add(const GetMoreProducts());
+    // Vérifier si le défilement est proche du bas et si le bloc n'est pas déjà en train de charger
+    if (currentScroll > (maxScroll * scrollPercentage)) {
+      if (context.read<ProductBloc>().state is ProductLoaded &&
+          !context.read<ProductBloc>().isFetching) {
+        
+        // Vérifier si plus de produits peuvent être chargés en fonction des metadata
+        final state = context.read<ProductBloc>().state as ProductLoaded;
+        if (state.metaData.total > state.products.length) {
+          print("Déclenchement de GetMoreProducts");
+          context.read<ProductBloc>().add(const GetMoreProducts());
+        } else {
+          print("Tous les produits ont été chargés");
+        }
+      }
     }
   }
-}
 
-@override
-void initState() {
-  scrollController.addListener(_scrollListener);
-  super.initState();
-}
+  @override
+  void initState() {
+    scrollController.addListener(_scrollListener);
+    super.initState();
+  }
 
-@override
-void dispose() {
-  scrollController.removeListener(_scrollListener);
-  scrollController.dispose(); // Dispose of controller to prevent memory leaks
-  super.dispose();
-}
+  @override
+  void dispose() {
+    scrollController.removeListener(_scrollListener);
+    scrollController.dispose(); // Dispose of controller to prevent memory leaks
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -242,17 +248,17 @@ void dispose() {
           ),
           Expanded(
             child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: BlocBuilder<ProductBloc, ProductState>(
-                    builder: (context, state) {
-                  //Result Empty and No Error
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: BlocBuilder<ProductBloc, ProductState>(
+                builder: (context, state) {
+                  // Résultat vide et pas d'erreur
                   if (state is ProductLoaded && state.products.isEmpty) {
                     return const AlertCard(
                       image: kEmpty,
                       message: "Products not found!",
                     );
                   }
-                  //Error and no preloaded data
+                  // Erreur et pas de données préchargées
                   if (state is ProductError && state.products.isEmpty) {
                     if (state.failure is NetworkFailure) {
                       return AlertCard(
@@ -278,18 +284,19 @@ void dispose() {
                           Image.asset('assets/status_image/no-connection.png'),
                         const Text("Products not found!"),
                         IconButton(
-                            onPressed: () {
-                              context.read<ProductBloc>().add(GetProducts(
-                                  FilterProductParams(
-                                      keyword: context
-                                          .read<FilterCubit>()
-                                          .searchController
-                                          .text)));
-                            },
-                            icon: const Icon(Icons.refresh)),
+                          onPressed: () {
+                            context.read<ProductBloc>().add(GetProducts(
+                                FilterProductParams(
+                                    keyword: context
+                                        .read<FilterCubit>()
+                                        .searchController
+                                        .text)));
+                          },
+                          icon: const Icon(Icons.refresh),
+                        ),
                         SizedBox(
                           height: MediaQuery.of(context).size.height * 0.1,
-                        )
+                        ),
                       ],
                     );
                   }
@@ -304,12 +311,12 @@ void dispose() {
                           ((state is ProductLoading) ? 10 : 0),
                       controller: scrollController,
                       padding: EdgeInsets.only(
-                          top: 18,
-                          left: 20,
-                          right: 20,
-                          bottom: (80 + MediaQuery.of(context).padding.bottom)),
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        top: 18,
+                        left: 20,
+                        right: 20,
+                        bottom: (80 + MediaQuery.of(context).padding.bottom),
+                      ),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
                         childAspectRatio: 0.55,
                         crossAxisSpacing: 12,
@@ -332,8 +339,27 @@ void dispose() {
                       },
                     ),
                   );
-                })),
-          )
+                },
+              ),
+            ),
+          ),
+          // Affichage de l'indicateur de fin de liste
+          BlocBuilder<ProductBloc, ProductState>(
+            builder: (context, state) {
+              if (state is ProductLoaded && state.products.length >= state.metaData.total) {
+                return Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Center(
+                    child: Text(
+                      "Tous les produits ont été chargés.",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                );
+              }
+              return Container(); // Rien à afficher si tous les produits ne sont pas encore chargés
+            },
+          ),
         ],
       ),
     );
