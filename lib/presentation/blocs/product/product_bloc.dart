@@ -143,32 +143,44 @@ class ProductBloc extends Bloc<ProductEvent, ProductState> {
     }
   }
 
-  void _onSelectVariant(SelectVariantEvent event, Emitter<ProductState> emit) {
-    final state = this.state;
-    if (state is ProductLoaded) {
+ void _onSelectVariant(SelectVariantEvent event, Emitter<ProductState> emit) {
+  final state = this.state;
+  if (state is ProductLoaded) {
+    try {
       // Rechercher le produit en question grâce à l'ID reçu via l'événement
       final Product selectedProduct = state.products.firstWhere(
-        (product) => product.id == event.productId, // Utilise l'ID du produit de l'événement
-        orElse: () => throw Exception('Product not found'),
+        (product) => product.id == event.productId,
+        orElse: () => throw Exception('Produit non trouvé'),
       );
 
       // Rechercher le variant sélectionné parmi les variants de ce produit
       final Variant selectedVariant = selectedProduct.variants.firstWhere(
         (variant) =>
-            variant.color.name == event.color &&
+            variant.color.codeHexa == event.color && // Utilisation de codeHexa
             variant.size.name == event.size,
-        orElse: () => throw Exception('Variant not found'),
+        orElse: () => throw Exception('Variant non trouvé pour la couleur et taille sélectionnées'),
       );
 
-      // Mettre à jour l'état avec le variant sélectionné
       emit(ProductLoaded(
         products: state.products,
         params: state.params,
         metaData: state.metaData,
         selectedVariant: selectedVariant,
       ));
+    } catch (e) {
+      // Log de l'erreur pour plus d'informations
+      print('Erreur lors de la sélection du variant: $e');
+
+      emit(ProductError(
+        products: state.products,
+        metaData: state.metaData,
+        failure: ExceptionFailure(),
+        params: state.params,
+      ));
     }
   }
+}
+
 
   void _onResetVariant(ResetVariantEvent event, Emitter<ProductState> emit) {
     final state = this.state;
