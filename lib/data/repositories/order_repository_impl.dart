@@ -26,7 +26,7 @@ class OrderRepositoryImpl implements OrderRepository {
   });
 
   @override
-  Future<Either<Failure, OrderDetailResponse>> addOrder(OrderDetailResponse params) async {
+  Future<Either<Failure, bool>> addOrder(OrderDetailResponse params) async {
     if (await userLocalDataSource.isTokenAvailable()) {
       final String token = await userLocalDataSource.getToken();
       final remoteProduct = await remoteDataSource.addOrder(

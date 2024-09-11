@@ -6,7 +6,7 @@ import '../../core/usecases/usecase.dart';
 import '../entities/order/order_details.dart';
 
 abstract class OrderRepository {
-  Future<Either<Failure, OrderDetailResponse>> addOrder(OrderDetailResponse params);
+  Future<Either<Failure, bool>> addOrder(OrderDetailResponse params);
   Future<Either<Failure, List<OrderDetails>>> getRemoteOrders();
   Future<Either<Failure, List<OrderDetails>>> getCachedOrders();
   Future<Either<Failure, NoParams>> clearLocalOrders();

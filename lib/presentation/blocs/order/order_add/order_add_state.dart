@@ -8,7 +8,7 @@ class OrderAddInitial extends OrderAddState {}
 class OrderAddLoading extends OrderAddState {}
 
 class OrderAddSuccess extends OrderAddState {
-  final OrderDetailResponse order;
+  final bool order;
   OrderAddSuccess(this.order);
 }
 
