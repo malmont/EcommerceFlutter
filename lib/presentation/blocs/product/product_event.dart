@@ -21,12 +21,12 @@ class GetMoreProducts extends ProductEvent {
 class SelectVariantEvent extends ProductEvent {
   final String color;
   final String size;
-  final String productId; // Ajoute l'ID du produit
+  final String productId;
 
   const SelectVariantEvent({
     required this.color,
     required this.size,
-    required this.productId, // Requis pour l'événement
+    required this.productId,
   });
 
   @override

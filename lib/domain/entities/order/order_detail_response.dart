@@ -6,7 +6,7 @@ class OrderDetailResponse extends Equatable {
   final int addressId;
   final int carrierId;
   final int typeOrder;
-  final List<OrderItemDetail> items; // Liste des objets "OrderItemDetail"
+  final List<OrderItemDetail> items;
 
   const OrderDetailResponse({
     required this.orderSource,

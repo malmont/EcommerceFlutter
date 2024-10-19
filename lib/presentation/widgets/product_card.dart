@@ -1,8 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eshop/domain/entities/product/style.dart';
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../core/router/app_router.dart';
+import '../../design/design.dart';
 import '../../domain/entities/product/product.dart';
 
 class ProductCard extends StatelessWidget {
@@ -70,7 +72,7 @@ class ProductCard extends StatelessWidget {
                 : Hero(
                     tag: product!.id,
                     child: Padding(
-                      padding: const EdgeInsets.all(32.0),
+                      padding: const EdgeInsets.all(12.0),
                       child: CachedNetworkImage(
                         imageUrl: product!.image,
                         placeholder: (context, url) => Shimmer.fromColors(
@@ -85,8 +87,8 @@ class ProductCard extends StatelessWidget {
                   ),
           )),
           Padding(
-              padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
-              child: SizedBox(
+            padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+            child: SizedBox(
                 height: 18,
                 child: product == null
                     ? Container(
@@ -96,11 +98,10 @@ class ProductCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       )
-                    : Text(
-                        product!.name,
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-              )),
+                    : Text(product!.name,
+                        style: TextStyles.interRegularBody1
+                            .copyWith(color: Colours.colorsButtonMenu))),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
             child: Row(
@@ -115,13 +116,9 @@ class ProductCard extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                         )
-                      : Text(
-                          r'$' + product!.price.toString(),
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
+                      : Text(r'$' + (product!.price / 100).toString(),
+                          style: TextStyles.interBoldBody1
+                              .copyWith(color: Colours.primaryPalette)),
                 )
               ],
             ),
