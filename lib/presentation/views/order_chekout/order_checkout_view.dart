@@ -11,8 +11,6 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../../core/services/services_locator.dart' as di;
 import '../../../core/router/app_router.dart';
 import '../../../domain/entities/cart/cart_item.dart';
-import '../../../domain/entities/order/order_details.dart';
-import '../../../domain/entities/order/order_item.dart';
 import '../../blocs/delivery_info/delivery_info_fetch/delivery_info_fetch_cubit.dart';
 import '../../blocs/order/order_add/order_add_cubit.dart';
 import '../../widgets/input_form_button.dart';
@@ -25,6 +23,14 @@ class OrderCheckoutView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     int deliveryCharge = 0;
+    double subtotal = items.fold(
+            0.0,
+            (previousValue, element) =>
+                ((element.product.price * element.quantity) + previousValue)) /
+        100;
+    double tax = (subtotal * 0.05) + (subtotal * 0.10);
+    double total = subtotal + (deliveryCharge / 100) + tax;
+
     return BlocProvider(
       create: (context) => di.sl<OrderAddCubit>(),
       child: BlocListener<OrderAddCubit, OrderAddState>(
@@ -134,6 +140,7 @@ class OrderCheckoutView extends StatelessWidget {
                             if (state.carriers.isNotEmpty &&
                                 state.selectedCarrier != null) {
                               deliveryCharge = state.selectedCarrier!.price;
+                              total = subtotal + (deliveryCharge / 100) + tax;
                               return Row(
                                 children: [
                                   Padding(
@@ -273,7 +280,6 @@ class OrderCheckoutView extends StatelessWidget {
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
                                                 children: [
-                                                  // Affichage de la taille
                                                   Wrap(
                                                     children: [
                                                       Container(
@@ -307,7 +313,6 @@ class OrderCheckoutView extends StatelessWidget {
                                                       )
                                                     ],
                                                   ),
-                                                  // Affichage de la couleur
                                                   Wrap(
                                                     children: [
                                                       Container(
@@ -328,7 +333,7 @@ class OrderCheckoutView extends StatelessWidget {
                                                                           '#',
                                                                           ''),
                                                                   radix: 16) +
-                                                              0xFF000000), // Conversion du code hexadécimal en couleur
+                                                              0xFF000000),
                                                           border: Border.all(
                                                               color:
                                                                   Colors.black,
@@ -355,9 +360,9 @@ class OrderCheckoutView extends StatelessWidget {
                   height: 16,
                 ),
                 OutlineLabelCard(
-                  title: 'Order Summery',
+                  title: 'Order Summary',
                   child: Container(
-                    height: 120,
+                    height: 150,
                     padding: const EdgeInsets.symmetric(vertical: 8),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -379,21 +384,19 @@ class OrderCheckoutView extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text("Total Price"),
-                            Text(
-                                '\$${(items.fold(0.0, (previousValue, element) => ((element.product.price * element.quantity) + previousValue)) / 100).toStringAsFixed(2)}'),
+                            const Text("Subtotal"),
+                            Text('\$${subtotal.toStringAsFixed(2)}'),
                           ],
                         ),
                         BlocBuilder<CarrierFetchCubit, CarrierFetchState>(
                           builder: (context, state) {
                             if (state.carriers.isNotEmpty &&
                                 state.selectedCarrier != null) {
-                              deliveryCharge = state.selectedCarrier!
-                                  .price; // Stocker la valeur de livraison
+                              deliveryCharge = state.selectedCarrier!.price;
                             } else {
-                              deliveryCharge =
-                                  499; // Valeur par défaut si aucun transporteur n'est sélectionné
+                              deliveryCharge = 49; // Valeur par défaut
                             }
+                            total = subtotal + (deliveryCharge / 100) + tax;
                             return Column(
                               children: [
                                 Row(
@@ -401,15 +404,19 @@ class OrderCheckoutView extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text("Delivery Charge"),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          '\$${(deliveryCharge / 100).toStringAsFixed(2)}', // Affichage correct du montant
-                                        ),
-                                      ],
-                                    )
+                                    Text(
+                                      '\$${(deliveryCharge / 100).toStringAsFixed(2)}',
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text("Tax"),
+                                    Text(
+                                      '\$${tax.toStringAsFixed(2)}',
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(
@@ -420,10 +427,9 @@ class OrderCheckoutView extends StatelessWidget {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     const Text("Total"),
-                                    Text(
-                                        '\$${((items.fold(0.0, (previousValue, element) => (((element.product.price * element.quantity) + previousValue)) + deliveryCharge) / 100)).toStringAsFixed(2)}')
+                                    Text('\$${total.toStringAsFixed(2)}'),
                                   ],
-                                )
+                                ),
                               ],
                             );
                           },

@@ -10,6 +10,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../../../domain/entities/cart/cart_item.dart';
 import '../../../../../domain/entities/product/product.dart';
 
+import '../../../design/design.dart';
 import '../../blocs/cart/cart_bloc.dart';
 
 class ProductDetailsView extends StatefulWidget {
@@ -40,32 +41,27 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
     super.dispose();
   }
 
-  // Filtrer les tailles disponibles en fonction de la couleur sélectionnée
   List<String> getAvailableSizes(String color) {
     return widget.product.variants
-        .where((variant) =>
-            variant.color.codeHexa == color) // Utilisation de codeHexa
+        .where((variant) => variant.color.codeHexa == color)
         .map((variant) => variant.size.name)
         .toSet()
         .toList();
   }
 
-  // Filtrer les couleurs disponibles en fonction de la taille sélectionnée
   List<String> getAvailableColors(String size) {
     return widget.product.variants
         .where((variant) => variant.size.name == size)
-        .map((variant) => variant.color.codeHexa) // Utilisation de codeHexa
+        .map((variant) => variant.color.codeHexa)
         .toSet()
         .toList();
   }
 
-  // Fonction pour convertir un code hexadécimal en couleur Flutter
   Color getColorFromHex(String colorString) {
     return Color(
         int.parse(colorString.replaceFirst('#', ''), radix: 16) + 0xFF000000);
   }
 
-  // Fonction pour réinitialiser les sélections
   void resetSelection() {
     setState(() {
       selectedColor = null;
@@ -77,8 +73,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
   @override
   Widget build(BuildContext context) {
     final productBloc = BlocProvider.of<ProductBloc>(context);
-
-    // Obtenir toutes les couleurs et tailles uniques disponibles
     final uniqueColors = widget.product.variants
         .map((variant) => variant.color.codeHexa)
         .toSet()
@@ -170,7 +164,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   Center(
                     child: AnimatedSmoothIndicator(
                       activeIndex: _currentIndex,
-                      count: 2, // Modifier selon le nombre d'images disponibles
+                      count: 2,
                       effect: const WormEffect(
                         dotWidth: 10,
                         dotHeight: 10,
@@ -178,33 +172,23 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                       ),
                     ),
                   ),
-            
-
                   Text(
                     widget.product.name,
                     style: const TextStyle(
                         fontSize: 24, fontWeight: FontWeight.bold),
                   ),
-                 
-
                   Text(
                     '\$${(widget.product.price / 100).toStringAsFixed(2)}',
                     style: const TextStyle(fontSize: 20, color: Colors.green),
                   ),
-                 
-
-                  // Ajout d'un bouton pour réinitialiser la sélection
                   TextButton(
                     onPressed: resetSelection,
                     child: const Text("Réinitialiser la sélection"),
                   ),
-
-                  // Sélection de la taille et de la couleur
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // Sélection de la taille
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -219,12 +203,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                 onTap: () {
                                   setState(() {
                                     selectedSize = size;
-
-                                    // Filtrer les couleurs disponibles après la sélection de la taille
                                     final availableColors =
                                         getAvailableColors(size);
-
-                                    // Réinitialiser la couleur si elle n'est plus valide
                                     if (selectedColor != null &&
                                         !availableColors
                                             .contains(selectedColor)) {
@@ -232,8 +212,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                       EasyLoading.showInfo(
                                           "La couleur sélectionnée n'est plus disponible pour cette taille.");
                                     }
-
-                                    // Déclencher l'événement si valide
                                     if (selectedColor != null) {
                                       productBloc.add(SelectVariantEvent(
                                         productId: widget.product.id,
@@ -262,7 +240,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                           ),
                         ],
                       ),
-                      // Sélection de la couleur
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -277,8 +254,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                 onTap: () {
                                   setState(() {
                                     selectedColor = color;
-
-                                    // Filtrer les tailles disponibles après la sélection de la couleur
                                     final availableSizes =
                                         getAvailableSizes(color);
 
@@ -320,7 +295,6 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                     ],
                   ),
                   const SizedBox(height: 10),
-
                   if (selectedVariant != null) ...[
                     Text(
                         'Couleur sélectionnée : ${selectedVariant.color.name}'),
@@ -338,6 +312,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
       ),
       bottomNavigationBar: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
+          bool isSelected = false;
           Variant? selectedVariant =
               state is ProductLoaded ? state.selectedVariant : null;
 
@@ -377,8 +352,11 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                 ),
                 const Spacer(),
                 SizedBox(
-                  width: 120,
+                  width: 160,
                   child: ElevatedButton(
+                    style: CustomButtonStyle.customButtonStyle(
+                        type: ButtonType.selectedButton,
+                        isSelected: isSelected),
                     onPressed: selectedVariant != null
                         ? () {
                             context.read<CartBloc>().add(AddProduct(

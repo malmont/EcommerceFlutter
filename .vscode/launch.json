@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Flutter Local",
+      "program": "lib/main.dart",
+      "request": "launch",
+      "type": "dart",
+      "toolArgs": [
+        "--dart-define=ENV_FILE=.env.local"
+      ],
+      "args": []
+    },
+    {
+      "name": "Flutter Prod",
+      "program": "lib/main.dart",
+      "request": "launch",
+      "type": "dart",
+      "toolArgs": [
+        "--dart-define=ENV_FILE=.env.prod"
+      ],
+      "args": []
+    }
+  ]
+}
