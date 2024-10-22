@@ -21,7 +21,6 @@ class OtherView extends StatelessWidget {
       child: ListView(
         physics: const BouncingScrollPhysics(),
         children: [
-          const SizedBox(height: Units.sizedbox_10),
           Padding(
             padding: const EdgeInsets.symmetric(
                 horizontal: Units.edgeInsetsXXXLarge,
@@ -96,7 +95,6 @@ class OtherView extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(height: Units.sizedbox_25),
           BlocBuilder<UserBloc, UserState>(
             builder: (context, state) {
               return OtherItemCard(
@@ -152,7 +150,7 @@ class OtherView extends StatelessWidget {
               }
             },
           ),
-          const SizedBox(height: Units.sizedbox_8),
+          const SizedBox(height: Units.sizedbox_5),
           BlocBuilder<UserBloc, UserState>(
             builder: (context, state) {
               if (state is UserLogged) {

@@ -55,6 +55,7 @@ class OrderCheckoutView extends StatelessWidget {
         },
         child: Scaffold(
           appBar: AppBar(
+            surfaceTintColor: Colours.white,
             backgroundColor: Colors.white,
             title: const Text('Order Checkout'),
           ),
@@ -68,6 +69,8 @@ class OrderCheckoutView extends StatelessWidget {
                     height: 12,
                   ),
                   Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsMedium),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(Units.radiusXXXLarge),
@@ -153,6 +156,8 @@ class OrderCheckoutView extends StatelessWidget {
                     height: 12,
                   ),
                   Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsMedium),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(Units.radiusXXXLarge),
@@ -260,6 +265,8 @@ class OrderCheckoutView extends StatelessWidget {
                     height: Units.sizedbox_16,
                   ),
                   Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsMedium),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(Units.radiusXXXLarge),
@@ -507,6 +514,8 @@ class OrderCheckoutView extends StatelessWidget {
                     height: Units.sizedbox_16,
                   ),
                   Container(
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsMedium),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(Units.radiusXXXLarge),
