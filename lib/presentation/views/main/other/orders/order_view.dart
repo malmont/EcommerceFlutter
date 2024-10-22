@@ -1,7 +1,9 @@
+import 'package:eshop/design/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/constant/images.dart';
+import '../../../../../design/design.dart';
 import '../../../../blocs/order/order_fetch/order_fetch_cubit.dart';
 import '../../../../widgets/order_info_card.dart';
 
@@ -16,15 +18,15 @@ class OrderView extends StatelessWidget {
       ),
       body: BlocBuilder<OrderFetchCubit, OrderFetchState>(
         builder: (context, state) {
-          if(state is! OrderFetchLoading && state.orders.isEmpty) {
+          if (state is! OrderFetchLoading && state.orders.isEmpty) {
             return Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset(kOrderDelivery),
-                const Text("Orders are Empty!"),
+                const Text("Orders are Empty!",
+                    style: TextStyles.interRegularBody1),
                 SizedBox(
-                  height:
-                  MediaQuery.of(context).size.height * 0.1,
+                  height: MediaQuery.of(context).size.height * 0.1,
                 )
               ],
             );
@@ -34,10 +36,11 @@ class OrderView extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               itemCount: state.orders.length,
               padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                bottom: (10 + MediaQuery.of(context).padding.bottom),
-                top: 10,
+                left: Units.edgeInsetsXXLarge,
+                right: Units.edgeInsetsXXLarge,
+                bottom: (Units.edgeInsetsXXLarge +
+                    MediaQuery.of(context).padding.bottom),
+                top: Units.edgeInsetsXXLarge,
               ),
               itemBuilder: (context, index) => OrderInfoCard(
                 orderDetails: state.orders[index],
@@ -48,10 +51,11 @@ class OrderView extends StatelessWidget {
               physics: const BouncingScrollPhysics(),
               itemCount: 6,
               padding: EdgeInsets.only(
-                left: 20,
-                right: 20,
-                bottom: (10 + MediaQuery.of(context).padding.bottom),
-                top: 10,
+                left: Units.edgeInsetsXXLarge,
+                right: Units.edgeInsetsXXLarge,
+                bottom: (Units.edgeInsetsXXLarge +
+                    MediaQuery.of(context).padding.bottom),
+                top: Units.edgeInsetsXXLarge,
               ),
               itemBuilder: (context, index) => const OrderInfoCard(),
             );

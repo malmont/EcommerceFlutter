@@ -37,6 +37,8 @@ class Units {
 
   static const double u64 = 64.0;
 
+  static const double u70 = 70.0;
+
   static const double u74 = 74.0;
 
   static const double u96 = 96.0;
@@ -69,13 +71,17 @@ class Units {
   static const double xlarge = 48;
   static const double xxlarge = 64;
   static const double xxxlarge = 72;
+
+  static const double sizedbox_5 = 5;
   static const double sizedbox_8 = 8;
   static const double sizedbox_10 = 10;
   static const double sizedbox_12 = 12;
   static const double sizedbox_16 = 16;
   static const double sizedbox_20 = 20;
+  static const double sizedbox_25 = 25;
   static const double sizedbox_28 = 28;
   static const double sizedbox_30 = 30;
+  static const double sizedbox_32 = 32;
   static const double sizedbox_26 = 26;
   static const double sizedbox_7 = 7;
   static const double sizedbox_14 = 14;
@@ -83,8 +89,12 @@ class Units {
   static const double sizedbox_50 = 50;
   static const double sizedbox_56 = 56;
   static const double sizedbox_80 = 80;
+  static const double sizedbox_85 = 85;
+  static const double sizedbox_90 = 90;
+  static const double sizedbox_100 = 100;
   static const double sizedbox_150 = 150;
   static const double sizedbox_200 = 200;
+  static const double sizedbox_220 = 220;
   static const double sizedbox_250 = 250;
   static const double sizedbox_280 = 280;
   static const double sizedbox_700 = 700;
@@ -127,6 +137,8 @@ class Units {
   static const double radiusXXXXXXLarge = 24;
   static const double radiusXXXXXXXLarge = 28;
   static const double radiusXXXXXXXXLarge = 32;
+  static const double radiusXXXXXXXXXLarge = 36;
+  static const double radiusXXXXXXXXXXLarge = 40;
 
   static const double edgeInsets = 1;
   static const double edgeInsetsSmall = 2;

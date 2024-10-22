@@ -1,3 +1,4 @@
+import 'package:eshop/design/units.dart';
 import 'package:flutter/material.dart';
 
 import '../../design/design.dart';
@@ -5,23 +6,29 @@ import '../../design/design.dart';
 class OtherItemCard extends StatelessWidget {
   final String title;
   final Function()? onClick;
+  final IconData icon;
   const OtherItemCard({
     Key? key,
     required this.title,
     this.onClick,
+    required this.icon,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 4, top: 2),
+      padding: const EdgeInsets.only(
+          left: Units.edgeInsetsXXXLarge,
+          right: Units.edgeInsetsXXXLarge,
+          bottom: Units.edgeInsetsMedium,
+          top: Units.edgeInsetsSmall),
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(Units.radiusXXXXXLarge),
         onTap: onClick,
         child: Ink(
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(Units.radiusXXXXXLarge),
             boxShadow: const [
               BoxShadow(
                 color: Colors.black26,
@@ -34,13 +41,17 @@ class OtherItemCard extends StatelessWidget {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+            padding: const EdgeInsets.symmetric(
+                horizontal: Units.edgeInsetsLarge,
+                vertical: Units.edgeInsetsXXXLarge),
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   title,
-                  style: Theme.of(context).textTheme.titleSmall,
-                )
+                  style: TextStyles.interMediumBody1,
+                ),
+                Icon(icon, color: Colours.colorsButtonMenu),
               ],
             ),
           ),

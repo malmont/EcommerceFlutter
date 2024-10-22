@@ -86,12 +86,9 @@ class CartItemCard extends StatelessWidget {
                       children: [
                         Text(
                           '\$${(cartItem.product.price / 100).toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
+                          style: TextStyles.interRegularBody1,
                         ),
-                        const SizedBox(width: 10),
+                        const SizedBox(width: Units.sizedbox_10),
                       ],
                     ),
                   ),
@@ -99,22 +96,24 @@ class CartItemCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      // Affichage de la taille
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 10),
+                          const SizedBox(height: Units.sizedbox_10),
                           Wrap(
                             children: [
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 12, vertical: 8),
-                                margin: const EdgeInsets.all(4),
+                                    horizontal: Units.edgeInsetsXLarge,
+                                    vertical: Units.edgeInsetsLarge),
+                                margin: const EdgeInsets.all(
+                                    Units.edgeInsetsMedium),
                                 decoration: BoxDecoration(
                                   border: Border.all(
                                     color: Colors.black,
                                   ),
-                                  borderRadius: BorderRadius.circular(8),
+                                  borderRadius: BorderRadius.circular(
+                                      Units.radiusXXLarge),
                                 ),
                                 child: Text(
                                     cartItem.variant.size.name.substring(0, 1)),
@@ -123,15 +122,15 @@ class CartItemCard extends StatelessWidget {
                           ),
                         ],
                       ),
-                      // Affichage de la couleur
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 10),
+                          const SizedBox(height: Units.sizedbox_10),
                           Wrap(
                             children: [
                               Container(
-                                margin: const EdgeInsets.all(4),
+                                margin: const EdgeInsets.all(
+                                    Units.edgeInsetsMedium),
                                 width: 40,
                                 height: 40,
                                 decoration: BoxDecoration(
@@ -140,7 +139,7 @@ class CartItemCard extends StatelessWidget {
                                           cartItem.variant.color.codeHexa
                                               .replaceFirst('#', ''),
                                           radix: 16) +
-                                      0xFF000000), // Conversion du code hexadécimal en couleur
+                                      0xFF000000),
                                   border:
                                       Border.all(color: Colors.black, width: 2),
                                 ),
@@ -176,7 +175,7 @@ class CartItemCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: Units.sizedbox_10),
                 Text(
                   '${cartItem.quantity}',
                   style: const TextStyle(
@@ -184,7 +183,7 @@ class CartItemCard extends StatelessWidget {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: Units.sizedbox_10),
                 GestureDetector(
                   onTap: () {
                     context
@@ -192,8 +191,8 @@ class CartItemCard extends StatelessWidget {
                         .add(RemoveProduct(cartItem: cartItem));
                   },
                   child: Container(
-                    width: 30,
-                    height: 30,
+                    width: Units.u32,
+                    height: Units.u32,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.grey[300],

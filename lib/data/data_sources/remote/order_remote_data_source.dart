@@ -18,7 +18,7 @@ class OrderRemoteDataSourceSourceImpl implements OrderRemoteDataSource {
   @override
   Future<bool> addOrder(params, token) async {
     final response = await client.post(
-      Uri.parse('https://backend-strapi.online/jeesign/api/order/create'),
+      Uri.parse('$baseUrl/order/create'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -35,7 +35,7 @@ class OrderRemoteDataSourceSourceImpl implements OrderRemoteDataSource {
   @override
   Future<List<OrderDetailsModel>> getOrders(String token) async {
     final response = await client.get(
-      Uri.parse('https://backend-strapi.online/jeesign/api/ordersuser'),
+      Uri.parse('$baseUrl/ordersuser'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

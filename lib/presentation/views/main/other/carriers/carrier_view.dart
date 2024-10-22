@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 
+import '../../../../../design/design.dart';
+
 class CarrierView extends StatefulWidget {
   const CarrierView({Key? key}) : super(key: key);
 
@@ -50,7 +52,9 @@ class _CarrierViewState extends State<CarrierView> {
                   (state is CarrierActionLoading && state.carriers.isEmpty)
                       ? 5
                       : state.carriers.length,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Units.edgeInsetsXXXLarge,
+                  vertical: Units.edgeInsetsXLarge),
               itemBuilder: (context, index) =>
                   (state is CarrierActionLoading && state.carriers.isEmpty)
                       ? const CarrierCard(carrier: null, isSelected: false)

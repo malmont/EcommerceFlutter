@@ -28,14 +28,16 @@ class _CartViewState extends State<CartView> {
     bool isSelected = false;
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding:
+            const EdgeInsets.symmetric(horizontal: Units.edgeInsetsXXLarge),
         child: Stack(
           children: [
             Column(
               children: [
                 Expanded(
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsLarge),
                     child: BlocBuilder<CartBloc, CartState>(
                       builder: (context, state) {
                         if (state is CartError && state.cart.isEmpty) {
@@ -87,8 +89,8 @@ class _CartViewState extends State<CartView> {
                 right: 0,
                 child: Container(
                   color: Colors.white,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 0, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 0, vertical: Units.edgeInsetsLarge),
                   child: Column(
                     children: [
                       ElevatedButton.icon(
@@ -115,7 +117,9 @@ class _CartViewState extends State<CartView> {
                         children: [
                           Padding(
                             padding: const EdgeInsets.only(
-                                bottom: 4, left: 8, right: 8),
+                                bottom: Units.edgeInsetsMedium,
+                                left: Units.edgeInsetsLarge,
+                                right: Units.edgeInsetsLarge),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -133,8 +137,8 @@ class _CartViewState extends State<CartView> {
                             ),
                           ),
                           SizedBox(
-                            height: 40,
-                            width: 100,
+                            height: Units.sizedbox_40,
+                            width: Units.sizedbox_100,
                             child: ElevatedButton(
                               style: CustomButtonStyle.customButtonStyle(
                                   type: ButtonType.selectedButton,

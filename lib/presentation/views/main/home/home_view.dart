@@ -30,11 +30,9 @@ class _HomeViewState extends State<HomeView> {
     double currentScroll = scrollController.position.pixels;
     double scrollPercentage = 0.7;
 
-    // Vérifier si le défilement est proche du bas et si le bloc n'est pas déjà en train de charger
     if (currentScroll > (maxScroll * scrollPercentage)) {
       if (context.read<ProductBloc>().state is ProductLoaded &&
           !context.read<ProductBloc>().isFetching) {
-        // Vérifier si plus de produits peuvent être chargés en fonction des metadata
         final state = context.read<ProductBloc>().state as ProductLoaded;
         if (state.metaData.total > state.products.length) {
           print("Déclenchement de GetMoreProducts");
@@ -55,7 +53,7 @@ class _HomeViewState extends State<HomeView> {
   @override
   void dispose() {
     scrollController.removeListener(_scrollListener);
-    scrollController.dispose(); // Dispose of controller to prevent memory leaks
+    scrollController.dispose();
     super.dispose();
   }
 
@@ -85,7 +83,7 @@ class _HomeViewState extends State<HomeView> {
                         },
                         child: Text(
                           "${state.user.firstName} ${state.user.lastName}",
-                          style: const TextStyle(fontSize: 26),
+                          style: TextStyles.interItalicH5,
                         ),
                       ),
                       const Spacer(),
@@ -103,13 +101,13 @@ class _HomeViewState extends State<HomeView> {
                             ? CachedNetworkImage(
                                 imageUrl: state.user.image!,
                                 imageBuilder: (context, image) => CircleAvatar(
-                                  radius: 24.0,
+                                  radius: Units.radiusXXXXXXLarge,
                                   backgroundImage: image,
                                   backgroundColor: Colors.transparent,
                                 ),
                               )
                             : const CircleAvatar(
-                                radius: 24.0,
+                                radius: Units.radiusXXXXXXLarge,
                                 backgroundImage: AssetImage(kUserAvatar),
                                 backgroundColor: Colors.transparent,
                               ),
@@ -125,17 +123,15 @@ class _HomeViewState extends State<HomeView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            height: 8,
+                            height: Units.sizedbox_8,
                           ),
                           Text(
                             "Welcome,",
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 36),
+                            style: TextStyles.interItalicH5,
                           ),
                           Text(
                             "E-Shop mobile store",
-                            style: TextStyle(
-                                fontWeight: FontWeight.normal, fontSize: 22),
+                            style: TextStyles.interItalicH5,
                           ),
                         ],
                       ),
@@ -146,7 +142,7 @@ class _HomeViewState extends State<HomeView> {
                         child: const Padding(
                           padding: EdgeInsets.all(8.0),
                           child: CircleAvatar(
-                            radius: 24.0,
+                            radius: Units.radiusXXXXXXLarge,
                             backgroundImage: AssetImage(kUserAvatar),
                             backgroundColor: Colors.transparent,
                           ),
@@ -159,9 +155,9 @@ class _HomeViewState extends State<HomeView> {
             ),
             Padding(
               padding: const EdgeInsets.only(
-                top: 12,
-                left: 20,
-                right: 20,
+                top: Units.radiusXXXXLarge,
+                left: Units.edgeInsetsXXXLarge,
+                right: Units.edgeInsetsXXXLarge,
               ),
               child: Row(
                 children: [
@@ -177,9 +173,12 @@ class _HomeViewState extends State<HomeView> {
                               GetProducts(FilterProductParams(keyword: val))),
                           decoration: InputDecoration(
                               contentPadding: const EdgeInsets.only(
-                                  left: 20, bottom: 22, top: 22),
+                                  left: Units.edgeInsetsXXLarge,
+                                  bottom: Units.edgeInsetsXXXLarge,
+                                  top: Units.edgeInsetsXXXLarge),
                               prefixIcon: const Padding(
-                                padding: EdgeInsets.only(left: 8),
+                                padding: EdgeInsets.only(
+                                    left: Units.edgeInsetsLarge),
                                 child: Icon(
                                   Icons.search,
                                   color: Colours.colorsButtonMenu,
@@ -191,7 +190,8 @@ class _HomeViewState extends State<HomeView> {
                                       .text
                                       .isNotEmpty
                                   ? Padding(
-                                      padding: const EdgeInsets.only(right: 8),
+                                      padding: const EdgeInsets.only(
+                                          right: Units.edgeInsetsLarge),
                                       child: IconButton(
                                           onPressed: () {
                                             context
@@ -259,7 +259,8 @@ class _HomeViewState extends State<HomeView> {
             ),
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: Units.edgeInsetsLarge),
                 child: BlocBuilder<ProductBloc, ProductState>(
                   builder: (context, state) {
                     if (state is ProductLoaded && state.products.isEmpty) {
@@ -321,9 +322,9 @@ class _HomeViewState extends State<HomeView> {
                             ((state is ProductLoading) ? 10 : 0),
                         controller: scrollController,
                         padding: EdgeInsets.only(
-                          top: 18,
-                          left: 20,
-                          right: 20,
+                          top: Units.edgeInsetsXXLarge,
+                          left: Units.edgeInsetsXXLarge,
+                          right: Units.edgeInsetsXXLarge,
                           bottom: (80 + MediaQuery.of(context).padding.bottom),
                         ),
                         gridDelegate:
@@ -363,7 +364,7 @@ class _HomeViewState extends State<HomeView> {
                     child: Center(
                       child: Text(
                         "Tous les produits ont été chargés.",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyles.interRegularBody1,
                       ),
                     ),
                   );

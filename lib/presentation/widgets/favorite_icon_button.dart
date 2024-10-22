@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 
+import '../../design/design.dart';
+
 class FavoriteIconButton extends StatelessWidget {
   const FavoriteIconButton({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 32,
+      height: Units.sizedbox_32,
       child: ElevatedButton(
         onPressed: () {},
         style: ElevatedButton.styleFrom(

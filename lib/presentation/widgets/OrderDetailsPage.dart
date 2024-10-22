@@ -21,7 +21,7 @@ class OrderDetailsPage extends StatelessWidget {
         elevation: 0,
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(Units.edgeInsetsXXLarge),
         child: GridView.builder(
           itemCount: orderDetails.orderItems.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -34,19 +34,19 @@ class OrderDetailsPage extends StatelessWidget {
             final product = orderDetails.orderItems[index];
             return Card(
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16.0),
+                borderRadius: BorderRadius.circular(Units.radiusXXXXXLarge),
               ),
               elevation: 6,
               shadowColor: Colors.black12,
               child: InkWell(
-                borderRadius: BorderRadius.circular(16.0),
+                borderRadius: BorderRadius.circular(Units.radiusXXXXXLarge),
                 onTap: () {},
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     ClipRRect(
                       borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(16.0)),
+                          top: Radius.circular(Units.radiusXXXXXLarge)),
                       child: CachedNetworkImage(
                         width: double.infinity,
                         height: 250,
@@ -71,64 +71,45 @@ class OrderDetailsPage extends StatelessWidget {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 8),
+                          const SizedBox(height: Units.sizedbox_8),
                           Row(
                             children: [
                               const Icon(Icons.attach_money,
-                                  color: Colours.colorsButtonMenu, size: 16),
-                              const SizedBox(width: 4),
+                                  color: Colours.colorsButtonMenu, size: 20),
+                              const SizedBox(width: Units.edgeInsetsMedium),
                               Text(
-                                '\$${(product.totalPrice / 100).toStringAsFixed(2)}',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
+                                  '\$${(product.totalPrice / 100).toStringAsFixed(2)}',
+                                  style: TextStyles.interRegularBody1),
                             ],
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: Units.edgeInsetsMedium),
                           Row(
                             children: [
                               const Icon(Icons.swap_horizontal_circle_sharp,
-                                  color: Colours.colorsButtonMenu, size: 16),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Size: ${product.productVariantSize}',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
+                                  color: Colours.colorsButtonMenu, size: 20),
+                              const SizedBox(width: Units.edgeInsetsMedium),
+                              Text('Size: ${product.productVariantSize}',
+                                  style: TextStyles.interRegularBody1),
                             ],
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: Units.edgeInsetsMedium),
                           Row(
                             children: [
                               const Icon(Icons.colorize,
-                                  color: Colours.colorsButtonMenu, size: 16),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Color: ${product.productVariantColor}',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
+                                  color: Colours.colorsButtonMenu, size: 20),
+                              const SizedBox(width: Units.edgeInsetsMedium),
+                              Text('Color: ${product.productVariantColor}',
+                                  style: TextStyles.interRegularBody1),
                             ],
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: Units.edgeInsetsMedium),
                           Row(
                             children: [
                               const Icon(Icons.shopping_bag,
-                                  color: Colours.colorsButtonMenu, size: 16),
-                              const SizedBox(width: 4),
-                              Text(
-                                'Quantity: ${product.quantity}',
-                                style: const TextStyle(
-                                  fontSize: 14,
-                                  color: Colors.black,
-                                ),
-                              ),
+                                  color: Colours.colorsButtonMenu, size: 20),
+                              const SizedBox(width: Units.edgeInsetsMedium),
+                              Text('Quantity: ${product.quantity}',
+                                  style: TextStyles.interRegularBody1),
                             ],
                           ),
                         ],

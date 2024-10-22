@@ -20,15 +20,14 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<AuthenticationResponseModel> signIn(SignInParams params) async {
-    final response =
-        await client.post(Uri.parse('https://backend-strapi.online/jeesign/api/login'),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: json.encode({
-              'username': params.username,
-              'password': params.password,
-            }));
+    final response = await client.post(Uri.parse('$baseUrl/login'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'username': params.username,
+          'password': params.password,
+        }));
     if (response.statusCode == 200) {
       return authenticationResponseModelFromJson(response.body);
     } else if (response.statusCode == 400 || response.statusCode == 401) {
@@ -40,17 +39,16 @@ class UserRemoteDataSourceImpl implements UserRemoteDataSource {
 
   @override
   Future<AuthenticationResponseModel> signUp(SignUpParams params) async {
-    final response =
-        await client.post(Uri.parse('$baseUrl/authentication/local/sign-up'),
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: json.encode({
-              'firstName': params.firstName,
-              'lastName': params.lastName,
-              'email': params.email,
-              'password': params.password,
-            }));
+    final response = await client.post(Uri.parse('$baseUrl/register'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: json.encode({
+          'firstName': params.firstName,
+          'lastName': params.lastName,
+          'email': params.email,
+          'password': params.password,
+        }));
     if (response.statusCode == 201) {
       return authenticationResponseModelFromJson(response.body);
     } else if (response.statusCode == 400 || response.statusCode == 401) {
