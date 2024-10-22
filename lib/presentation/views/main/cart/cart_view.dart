@@ -4,6 +4,7 @@ import 'package:eshop/domain/entities/cart/cart_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../design/design.dart';
 import '../../../blocs/cart/cart_bloc.dart';
 import '../../../widgets/cart_item_card.dart';
 import '../../../widgets/input_form_button.dart';
@@ -24,6 +25,7 @@ class _CartViewState extends State<CartView> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSelected = false;
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -93,21 +95,16 @@ class _CartViewState extends State<CartView> {
                         onPressed: () {
                           context.read<CartBloc>().add(const ClearCart());
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 66, vertical: 12),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                        ),
+                        style: CustomButtonStyle.customButtonStyle(
+                            type: ButtonType.validButton,
+                            isSelected: isSelected),
                         icon: const Icon(
                           Icons.delete,
-                          color: Colors.white,
+                          color: Colors.black,
                         ),
-                        label: const Text(
+                        label: Text(
                           'Clear Cart',
-                          style: TextStyle(color: Colors.white),
+                          style: TextStyles.interRegularBody1.copyWith(),
                         ),
                       ),
                       const SizedBox(
@@ -124,30 +121,33 @@ class _CartViewState extends State<CartView> {
                               children: [
                                 Text(
                                   'Total items: ${state.totalItems}',
-                                  style: const TextStyle(fontSize: 16),
+                                  style:
+                                      TextStyles.interRegularBody1.copyWith(),
                                 ),
                                 Text(
-                                  '\$${(state.cart.fold(0.0, (previousValue, element) => (element.product.price * element.quantity) + previousValue) / 100).toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500),
-                                ),
+                                    '\$${(state.cart.fold(0.0, (previousValue, element) => (element.product.price * element.quantity) + previousValue) / 100).toStringAsFixed(2)}',
+                                    style: TextStyles.interBoldBody2.copyWith(
+                                      color: Colours.colorsButtonMenu,
+                                    )),
                               ],
                             ),
                           ),
                           SizedBox(
                             height: 40,
                             width: 100,
-                            child: InputFormButton(
-                              color: Colors.black87,
-                              cornerRadius: 36,
-                              padding: EdgeInsets.zero,
-                              onClick: () {
+                            child: ElevatedButton(
+                              style: CustomButtonStyle.customButtonStyle(
+                                  type: ButtonType.selectedButton,
+                                  isSelected: isSelected),
+                              onPressed: () {
                                 Navigator.of(context).pushNamed(
                                     AppRouter.orderCheckout,
                                     arguments: state.cart);
                               },
-                              titleText: 'Checkout',
+                              child: const Text(
+                                'Checkout',
+                                style: TextStyles.interRegularBody1,
+                              ),
                             ),
                           ),
                         ],

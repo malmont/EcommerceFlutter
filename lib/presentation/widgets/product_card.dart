@@ -73,15 +73,33 @@ class ProductCard extends StatelessWidget {
                     tag: product!.id,
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
-                      child: CachedNetworkImage(
-                        imageUrl: product!.image,
-                        placeholder: (context, url) => Shimmer.fromColors(
-                          baseColor: Colors.grey.shade100,
-                          highlightColor: Colors.white,
-                          child: Container(),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15.0),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 10.0,
+                              offset: Offset(0, 5),
+                            ),
+                          ],
                         ),
-                        errorWidget: (context, url, error) =>
-                            const Center(child: Icon(Icons.error)),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(15.0),
+                          child: CachedNetworkImage(
+                            imageUrl: product!.image,
+                            placeholder: (context, url) => Shimmer.fromColors(
+                              baseColor: Colors.grey.shade100,
+                              highlightColor: Colors.white,
+                              child: Container(
+                                color: Colors.grey.shade200,
+                              ),
+                            ),
+                            errorWidget: (context, url, error) =>
+                                const Center(child: Icon(Icons.error)),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
                     ),
                   ),

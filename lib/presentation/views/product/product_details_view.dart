@@ -5,6 +5,7 @@ import 'package:eshop/presentation/blocs/product/product_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../../../domain/entities/cart/cart_item.dart';
@@ -70,6 +71,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
     productBloc.add(const ResetVariantEvent());
   }
 
+  bool isSelected = false;
   @override
   Widget build(BuildContext context) {
     final productBloc = BlocProvider.of<ProductBloc>(context);
@@ -99,211 +101,338 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
           if (state is ProductLoaded) {
             selectedVariant = state.selectedVariant;
 
-            return Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
-                    child: CarouselSlider(
-                      items: [
-                        Container(
-                          width: 250,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: CachedNetworkImage(
-                            imageUrl: widget.product.image,
-                            imageBuilder: (context, imageProvider) => Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.0),
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: 250,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                            borderRadius: BorderRadius.circular(20.0),
-                          ),
-                          child: CachedNetworkImage(
-                            imageUrl: widget.product.image,
-                            imageBuilder: (context, imageProvider) => Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(20.0),
-                                image: DecorationImage(
-                                  image: imageProvider,
-                                  fit: BoxFit.contain,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                      options: CarouselOptions(
-                        height: 300,
-                        viewportFraction: 1.0,
-                        enlargeCenterPage: true,
-                        onPageChanged: (index, reason) {
-                          setState(() {
-                            _currentIndex = index;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                  Center(
-                    child: AnimatedSmoothIndicator(
-                      activeIndex: _currentIndex,
-                      count: 2,
-                      effect: const WormEffect(
-                        dotWidth: 10,
-                        dotHeight: 10,
-                        activeDotColor: Colors.blueAccent,
-                      ),
-                    ),
-                  ),
-                  Text(
-                    widget.product.name,
-                    style: const TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    '\$${(widget.product.price / 100).toStringAsFixed(2)}',
-                    style: const TextStyle(fontSize: 20, color: Colors.green),
-                  ),
-                  TextButton(
-                    onPressed: resetSelection,
-                    child: const Text("Réinitialiser la sélection"),
-                  ),
-                  Row(
+            return SafeArea(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('taille', style: TextStyle(fontSize: 18)),
-                          const SizedBox(height: 10),
-                          Wrap(
-                            children: (selectedColor != null
-                                    ? getAvailableSizes(selectedColor!)
-                                    : uniqueSizes)
-                                .map((size) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedSize = size;
-                                    final availableColors =
-                                        getAvailableColors(size);
-                                    if (selectedColor != null &&
-                                        !availableColors
-                                            .contains(selectedColor)) {
-                                      selectedColor = null;
-                                      EasyLoading.showInfo(
-                                          "La couleur sélectionnée n'est plus disponible pour cette taille.");
-                                    }
-                                    if (selectedColor != null) {
-                                      productBloc.add(SelectVariantEvent(
-                                        productId: widget.product.id,
-                                        color: selectedColor!,
-                                        size: selectedSize!,
-                                      ));
-                                    }
-                                  });
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 12, vertical: 8),
-                                  margin: const EdgeInsets.all(4),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: selectedSize == size
-                                          ? Colors.black
-                                          : Colors.grey,
-                                    ),
-                                    borderRadius: BorderRadius.circular(8),
+                      CarouselSlider(
+                        items: [
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 10.0,
+                                    offset: Offset(0, 5),
                                   ),
-                                  child: Text(size.substring(0, 1)),
+                                ],
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15.0),
+                                child: CachedNetworkImage(
+                                  imageUrl: widget.product.image,
+                                  placeholder: (context, url) =>
+                                      Shimmer.fromColors(
+                                    baseColor: Colors.grey.shade100,
+                                    highlightColor: Colors.white,
+                                    child: Container(
+                                      color: Colors.grey.shade200,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      const Center(child: Icon(Icons.error)),
+                                  fit: BoxFit.cover,
                                 ),
-                              );
-                            }).toList(),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15.0),
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 10.0,
+                                    offset: Offset(0, 5),
+                                  ),
+                                ],
+                              ),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(15.0),
+                                child: CachedNetworkImage(
+                                  imageUrl: widget.product.image,
+                                  placeholder: (context, url) =>
+                                      Shimmer.fromColors(
+                                    baseColor: Colors.grey.shade100,
+                                    highlightColor: Colors.white,
+                                    child: Container(
+                                      color: Colors.grey.shade200,
+                                    ),
+                                  ),
+                                  errorWidget: (context, url, error) =>
+                                      const Center(child: Icon(Icons.error)),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                        options: CarouselOptions(
+                          height: 400,
+                          viewportFraction: 1.0,
+                          enlargeCenterPage: true,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _currentIndex = index;
+                            });
+                          },
+                        ),
+                      ),
+                      Center(
+                        child: AnimatedSmoothIndicator(
+                          activeIndex: _currentIndex,
+                          count: 2,
+                          effect: const WormEffect(
+                            dotWidth: 10,
+                            dotHeight: 10,
+                            activeDotColor: Colors.blueAccent,
+                          ),
+                        ),
+                      ),
+                      Text(
+                        widget.product.name,
+                        style: TextStyles.interBoldH6
+                            .copyWith(color: Colours.colorsButtonMenu),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                          '\$${(widget.product.price / 100).toStringAsFixed(2)}',
+                          style: TextStyles.interBoldBody1
+                              .copyWith(color: Colours.primaryPalette)),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      SizedBox(
+                        width: 220,
+                        child: ElevatedButton(
+                          style: CustomButtonStyle.customButtonStyle(
+                              type: ButtonType.selectedButton,
+                              isSelected: isSelected),
+                          onPressed: resetSelection,
+                          child: const Text('Réinitialiser la sélection'),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 6.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                child: Text(
+                                  'taille',
+                                  style: TextStyles.interRegularBody1
+                                      .copyWith(color: Colours.white),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Wrap(
+                                children: (selectedColor != null
+                                        ? getAvailableSizes(selectedColor!)
+                                        : uniqueSizes)
+                                    .map((size) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        selectedSize = size;
+                                        final availableColors =
+                                            getAvailableColors(size);
+                                        if (selectedColor != null &&
+                                            !availableColors
+                                                .contains(selectedColor)) {
+                                          selectedColor = null;
+                                          EasyLoading.showInfo(
+                                              "La couleur sélectionnée n'est plus disponible pour cette taille.");
+                                        }
+                                        if (selectedColor != null) {
+                                          productBloc.add(SelectVariantEvent(
+                                            productId: widget.product.id,
+                                            color: selectedColor!,
+                                            size: selectedSize!,
+                                          ));
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 12, vertical: 8),
+                                      margin: const EdgeInsets.all(4),
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: selectedSize == size
+                                              ? Colors.black
+                                              : Colors.grey,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                      child: Text(size.substring(0, 1)),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 8.0, vertical: 6.0),
+                                decoration: BoxDecoration(
+                                  color: Colors.black,
+                                  borderRadius: BorderRadius.circular(5.0),
+                                ),
+                                child: Text(
+                                  'Couleur',
+                                  style: TextStyles.interRegularBody1
+                                      .copyWith(color: Colours.white),
+                                ),
+                              ),
+                              const SizedBox(height: 9),
+                              Wrap(
+                                children: (selectedSize != null
+                                        ? getAvailableColors(selectedSize!)
+                                        : uniqueColors)
+                                    .map((color) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        selectedColor = color;
+                                        final availableSizes =
+                                            getAvailableSizes(color);
+
+                                        if (selectedSize != null &&
+                                            !availableSizes
+                                                .contains(selectedSize)) {
+                                          selectedSize = null;
+                                          EasyLoading.showInfo(
+                                              "La taille sélectionnée n'est plus disponible pour cette couleur.");
+                                        }
+
+                                        if (selectedSize != null) {
+                                          productBloc.add(SelectVariantEvent(
+                                            productId: widget.product.id,
+                                            color: selectedColor!,
+                                            size: selectedSize!,
+                                          ));
+                                        }
+                                      });
+                                    },
+                                    child: Container(
+                                      margin: const EdgeInsets.all(4),
+                                      width: 40,
+                                      height: 40,
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        color: getColorFromHex(color),
+                                        border: selectedColor == color
+                                            ? Border.all(
+                                                color: Colors.black, width: 2)
+                                            : null,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ],
                           ),
                         ],
                       ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Couleur', style: TextStyle(fontSize: 18)),
-                          const SizedBox(height: 10),
-                          Wrap(
-                            children: (selectedSize != null
-                                    ? getAvailableColors(selectedSize!)
-                                    : uniqueColors)
-                                .map((color) {
-                              return GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    selectedColor = color;
-                                    final availableSizes =
-                                        getAvailableSizes(color);
-
-                                    if (selectedSize != null &&
-                                        !availableSizes
-                                            .contains(selectedSize)) {
-                                      selectedSize = null;
-                                      EasyLoading.showInfo(
-                                          "La taille sélectionnée n'est plus disponible pour cette couleur.");
-                                    }
-
-                                    if (selectedSize != null) {
-                                      productBloc.add(SelectVariantEvent(
-                                        productId: widget.product.id,
-                                        color: selectedColor!,
-                                        size: selectedSize!,
-                                      ));
-                                    }
-                                  });
-                                },
-                                child: Container(
-                                  margin: const EdgeInsets.all(4),
-                                  width: 40,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: getColorFromHex(color),
-                                    border: selectedColor == color
-                                        ? Border.all(
-                                            color: Colors.black, width: 2)
-                                        : null,
+                      const SizedBox(height: 10),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 10.0),
+                        padding: const EdgeInsets.all(16.0),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(12.0),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Colors.black26,
+                              blurRadius: 6.0,
+                              offset: Offset(0, 3),
+                            ),
+                          ],
+                        ),
+                        child: selectedVariant != null
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.color_lens,
+                                          color: Colours.colorsButtonMenu),
+                                      const SizedBox(width: 8.0),
+                                      Text(
+                                        'Couleur sélectionnée : ${selectedVariant.color.name}',
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
                                   ),
+                                  const SizedBox(height: 10.0),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.format_size,
+                                          color: Colours.colorsButtonMenu),
+                                      const SizedBox(width: 8.0),
+                                      Text(
+                                        'Taille sélectionnée : ${selectedVariant.size.name}',
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 10.0),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.inventory,
+                                          color: Colours.colorsButtonMenu),
+                                      const SizedBox(width: 8.0),
+                                      Text(
+                                        'Quantité en stock : ${selectedVariant.stockQuantity}',
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            : const Center(
+                                child: Text(
+                                  'Aucun variant sélectionné',
+                                  style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.red),
                                 ),
-                              );
-                            }).toList(),
-                          ),
-                        ],
+                              ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 10),
-                  if (selectedVariant != null) ...[
-                    Text(
-                        'Couleur sélectionnée : ${selectedVariant.color.name}'),
-                    Text('Taille sélectionnée : ${selectedVariant.size.name}'),
-                    Text(
-                        'Quantité en stock : ${selectedVariant.stockQuantity}'),
-                  ] else
-                    const Text('Aucun variant sélectionné'),
-                ],
+                ),
               ),
             );
           }

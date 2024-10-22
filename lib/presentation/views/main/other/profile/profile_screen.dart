@@ -1,6 +1,7 @@
 import 'package:eshop/core/constant/images.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../design/design.dart';
 import '../../../../../domain/entities/user/user.dart';
 import '../../../../widgets/input_form_button.dart';
 import '../../../../widgets/input_text_form_field.dart';
@@ -28,6 +29,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSelected = false;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -80,10 +82,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       bottomNavigationBar: SafeArea(
           child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-        child: InputFormButton(
-          onClick: () {},
-          titleText: "Update",
-          color: Colors.black87,
+        child: ElevatedButton(
+          style: CustomButtonStyle.customButtonStyle(
+              type: ButtonType.selectedButton, isSelected: isSelected),
+          onPressed: () {},
+          child: const Text('Update'),
         ),
       )),
     );

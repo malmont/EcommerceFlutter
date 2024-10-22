@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
+import '../../design/design.dart';
+
 class CarrierCard extends StatelessWidget {
   final Carrier? carrier;
   final bool isSelected;
@@ -21,67 +23,77 @@ class CarrierCard extends StatelessWidget {
           onTap: () {
             context.read<CarrierActionCubit>().selectCarrier(carrier!);
           },
-          child: OutlineLabelCard(
-            title: '',
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                   SizedBox(
-                     child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CachedNetworkImage(width: 50,
-                                    height: 50,
-                                    fit: BoxFit.cover,
-                        imageUrl: carrier!.photo,
-                                    ),
-                                       ),
-                   ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          carrier!.name,
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                        Text(
-                          carrier!.description,
-                          style: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
-                        ),
-                    
-                      ],
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15.0),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10.0,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SizedBox(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CachedNetworkImage(
+                      width: 50,
+                      height: 50,
+                      fit: BoxFit.cover,
+                      imageUrl: carrier!.photo,
                     ),
-                  ),    SizedBox(
-                          width: 25,
-                          child: Center(
-                            child: isSelected
-                                ? Container(
-                                    width: 10,
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(42),
-                                      color: Colors.black87,
-                                    ),
-                                  )
-                                : const SizedBox(),
-                          ),
-                        )
-                ],
-              ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        carrier!.name,
+                        style: TextStyles.interRegularBody1.copyWith(
+                          color: Colors.black,
+                        ),
+                      ),
+                      Text(
+                        carrier!.description,
+                        style: TextStyles.interBoldBody2.copyWith(
+                          color: Colours.colorsButtonMenu,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 25,
+                  child: Center(
+                    child: isSelected
+                        ? Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(42),
+                              color: Colours.colorsButtonMenu,
+                            ),
+                          )
+                        : const SizedBox(),
+                  ),
+                )
+              ],
             ),
           ),
         ),
       );
-    }else {
+    } else {
       return Shimmer.fromColors(
         baseColor: Colors.grey.shade200,
         highlightColor: Colors.white,

@@ -1,4 +1,6 @@
 import 'package:eshop/core/extension/string_extension.dart';
+import 'package:eshop/design/colours.dart';
+import 'package:eshop/design/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
@@ -22,81 +24,97 @@ class DeliveryInfoCard extends StatelessWidget {
         padding: const EdgeInsets.only(bottom: 10),
         child: InkWell(
           onTap: () {
-            context.read<DeliveryInfoActionCubit>().selectDeliveryInfo(deliveryInformation!);
+            context
+                .read<DeliveryInfoActionCubit>()
+                .selectDeliveryInfo(deliveryInformation!);
           },
-          child: OutlineLabelCard(
-            title: '',
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(Icons.edit_location),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15.0),
+              boxShadow: const [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 10.0,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            padding: const EdgeInsets.symmetric(vertical: 12),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Icon(
+                    Icons.edit_location,
+                    color: Colours.colorsButtonMenu,
                   ),
-                  const SizedBox(
-                    width: 4,
-                  ),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "${deliveryInformation!.firstName.capitalize()} ${deliveryInformation!.lastName}, ${deliveryInformation!.contactNumber}",
-                          style: const TextStyle(
-                            fontSize: 14,
-                          ),
+                ),
+                const SizedBox(
+                  width: 4,
+                ),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "${deliveryInformation!.firstName.capitalize()} ${deliveryInformation!.lastName}, ${deliveryInformation!.contactNumber}",
+                        style: TextStyles.interRegularBody1.copyWith(
+                          color: Colors.black,
                         ),
-                        Text(
-                          "${deliveryInformation!.addressLineOne}, ${deliveryInformation!.addressLineTwo}, ${deliveryInformation!.city}, ${deliveryInformation!.zipCode}",
-                          style: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w500),
+                      ),
+                      Text(
+                        "${deliveryInformation!.addressLineOne}, ${deliveryInformation!.addressLineTwo}, ${deliveryInformation!.city}, ${deliveryInformation!.zipCode}",
+                        style: TextStyles.interBoldBody2.copyWith(
+                          color: Colors.black,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 4),
-                          child: InkWell(
-                            onTap: () {
-                              showModalBottomSheet<void>(
-                                context: context,
-                                isScrollControlled: true,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(24.0),
-                                ),
-                                builder: (BuildContext context) {
-                                  return DeliveryInfoForm(
-                                    deliveryInfo: deliveryInformation,
-                                  );
-                                },
-                              );
-                            },
-                            child: const Text(
-                              "Edit",
-                              style: TextStyle(color: Colors.blueAccent),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 4),
+                        child: InkWell(
+                          onTap: () {
+                            showModalBottomSheet<void>(
+                              context: context,
+                              isScrollControlled: true,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(24.0),
+                              ),
+                              builder: (BuildContext context) {
+                                return DeliveryInfoForm(
+                                  deliveryInfo: deliveryInformation,
+                                );
+                              },
+                            );
+                          },
+                          child: Text(
+                            "Edit",
+                            style: TextStyles.interRegularBody2.copyWith(
+                              color: Colours.colorsButtonMenu,
                             ),
                           ),
-                        )
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
-                  SizedBox(
-                    width: 25,
-                    child: Center(
-                      child: isSelected
-                          ? Container(
-                              width: 10,
-                              height: 10,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(42),
-                                color: Colors.black87,
-                              ),
-                            )
-                          : const SizedBox(),
-                    ),
-                  )
-                ],
-              ),
+                ),
+                SizedBox(
+                  width: 25,
+                  child: Center(
+                    child: isSelected
+                        ? Container(
+                            width: 10,
+                            height: 10,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(42),
+                              color: Colours.colorsButtonMenu,
+                            ),
+                          )
+                        : const SizedBox(),
+                  ),
+                )
+              ],
             ),
           ),
         ),

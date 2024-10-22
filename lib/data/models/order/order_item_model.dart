@@ -1,44 +1,81 @@
-import '../../../domain/entities/order/order_item.dart';
-import '../product/price_tag_model.dart';
-import '../product/product_model.dart';
+import 'package:eshop/domain/entities/order/order_item.dart';
 
 class OrderItemModel extends OrderItem {
   const OrderItemModel({
-    required String id,
-    required ProductModel product,
-    required num price,
-    required num quantity,
+    required int id,
+    required int quantity,
+    required num unitPrice,
+    required num totalPrice,
+    required int productId,
+    required String productVariantName,
+    required String productVariantColor,
+    required String productVariantSize,
+    required String productImage,
   }) : super(
           id: id,
-          product: product,
-          price: price,
           quantity: quantity,
+          unitPrice: unitPrice,
+          totalPrice: totalPrice,
+          productId: productId,
+          productVariantName: productVariantName,
+          productVariantColor: productVariantColor,
+          productVariantSize: productVariantSize,
+          productImage: productImage,
         );
 
-  factory OrderItemModel.fromJson(Map<String, dynamic> json) => OrderItemModel(
-      id: json["_id"],
-      product: ProductModel.fromJson(json["product"]),
-      price: json["price"],
-      quantity: json["quantity"]);
+  factory OrderItemModel.fromJson(Map<String, dynamic> json) {
+    return OrderItemModel(
+      id: (json['id'] as num).toInt(),
+      quantity: (json['quantity'] as num).toInt(),
+      unitPrice: json['unitPrice'] as num,
+      totalPrice: json['totalPrice'] as num,
+      productId: (json['productId'] as num).toInt(),
+      productVariantName: json['productVariantName'] as String,
+      productVariantColor: json['productVariantColor'] as String,
+      productVariantSize: json['productVariantSize'] as String,
+      productImage: json['productImage'] as String,
+    );
+  }
 
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "product": (product as ProductModel).toJson(),
-        "price": price,
-        "quantity": quantity,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'quantity': quantity,
+      'unitPrice': unitPrice,
+      'totalPrice': totalPrice,
+      'productId': productId,
+      'productVariantName': productVariantName,
+      'productVariantColor': productVariantColor,
+      'productVariantSize': productVariantSize,
+      'productImage': productImage,
+    };
+  }
 
-  Map<String, dynamic> toJsonBody() => {
-        "_id": id,
-        "product": product.id,
-        "price": price,
-        "quantity": quantity,
-      };
+  factory OrderItemModel.fromEntity(OrderItem entity) {
+    return OrderItemModel(
+      id: entity.id,
+      quantity: entity.quantity,
+      unitPrice: entity.unitPrice,
+      totalPrice: entity.totalPrice,
+      productId: entity.productId,
+      productVariantName: entity.productVariantName,
+      productVariantColor: entity.productVariantColor,
+      productVariantSize: entity.productVariantSize,
+      productImage: entity.productImage,
+    );
+  }
 
-  factory OrderItemModel.fromEntity(OrderItem entity) => OrderItemModel(
-        id: entity.id,
-        product: ProductModel.fromEntity(entity.product),
-        price: entity.price,
-        quantity: entity.quantity,
-      );
+  Map<String, dynamic> toJsonBody() {
+    return {
+      "id": id,
+      "quantity": quantity,
+      "unitPrice": unitPrice,
+      "totalPrice": totalPrice,
+      "productId": productId,
+      "productVariantName": productVariantName,
+      "productVariantColor": productVariantColor,
+      "productVariantSize": productVariantSize,
+      "productImage": productImage,
+    };
+  }
 }

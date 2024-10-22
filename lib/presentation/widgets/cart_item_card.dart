@@ -1,9 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:eshop/data/models/cart/cart_item_model.dart';
+import 'package:eshop/design/design.dart';
 import 'package:eshop/domain/entities/cart/cart_item.dart';
 import 'package:eshop/presentation/blocs/cart/cart_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 
 class CartItemCard extends StatelessWidget {
   final CartItem cartItem;
@@ -24,39 +26,39 @@ class CartItemCard extends StatelessWidget {
       child: GestureDetector(
         onTap: onClick as void Function()?,
         onLongPress: onLongClick,
-        child: Row(mainAxisAlignment: MainAxisAlignment.center,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.all(2),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.shade50,
-                    blurRadius: 1,
-                  ),
-                ],
-              ),
-              child: SizedBox(
-                width: 100,
-                height: 120,
-                child: Card(
-                  color: Colors.white,
-                  elevation: 2,
-                  clipBehavior: Clip.antiAlias,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: CachedNetworkImage(
-                      imageUrl: cartItem.product.image,
-                      placeholder: (context, url) =>
-                          const Center(child: CircularProgressIndicator()),
-                      errorWidget: (context, url, error) =>
-                          const Center(child: Icon(Icons.error)),
+            Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Container(
+                width: 70,
+                height: 110,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.0),
+                  boxShadow: const [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 10.0,
+                      offset: Offset(0, 5),
                     ),
+                  ],
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(15.0),
+                  child: CachedNetworkImage(
+                    imageUrl: cartItem.product.image,
+                    placeholder: (context, url) => Shimmer.fromColors(
+                      baseColor: Colors.grey.shade100,
+                      highlightColor: Colors.white,
+                      child: Container(
+                        color: Colors.grey.shade200,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        const Center(child: Icon(Icons.error)),
+                    fit: BoxFit.fill,
                   ),
                 ),
               ),
@@ -73,8 +75,8 @@ class CartItemCard extends StatelessWidget {
                           : cartItem.product.name,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
+                      style: TextStyles.interBoldBody2.copyWith(
+                        color: Colours.colorsButtonMenu,
                       ),
                     ),
                   ),
@@ -170,6 +172,7 @@ class CartItemCard extends StatelessWidget {
                     child: const Icon(
                       Icons.add,
                       size: 20,
+                      color: Colours.colorsButtonMenu,
                     ),
                   ),
                 ),
@@ -198,6 +201,7 @@ class CartItemCard extends StatelessWidget {
                     child: const Icon(
                       Icons.remove,
                       size: 20,
+                      color: Colours.colorsButtonMenu,
                     ),
                   ),
                 ),

@@ -1,3 +1,4 @@
+import 'package:eshop/design/design.dart';
 import 'package:flutter/material.dart';
 
 class InputTextFormField extends StatefulWidget {
@@ -34,6 +35,9 @@ class _InputTextFormFieldState extends State<InputTextFormField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      style: TextStyles.interRegularBody1.copyWith(
+        color: Colors.black87,
+      ),
       controller: widget.controller,
       obscureText: widget.isSecureField && !_passwordVisible,
       enableSuggestions: !widget.isSecureField,
@@ -46,8 +50,8 @@ class _InputTextFormFieldState extends State<InputTextFormField> {
       decoration: InputDecoration(
         filled: true,
         hintText: widget.hint,
-        hintStyle: TextStyle(
-          fontSize: widget.hintTextSize,
+        hintStyle: TextStyles.interRegularBody1.copyWith(
+          color: Colors.black54,
         ),
         contentPadding: widget.contentPadding,
         suffixIcon: widget.isSecureField
@@ -64,11 +68,18 @@ class _InputTextFormFieldState extends State<InputTextFormField> {
               )
             : null,
         border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12.0),
-            borderSide: const BorderSide(
-              color: Colors.transparent,
-              width: 0.0,
-            ),
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(
+            color: Colors.transparent,
+            width: 0.0,
+          ),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12.0),
+          borderSide: const BorderSide(
+            color: Colours.colorsButtonMenu,
+            width: 1.0,
+          ),
         ),
       ),
     );
