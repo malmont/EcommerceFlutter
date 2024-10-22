@@ -144,6 +144,7 @@ class Units {
   static const double edgeInsetsSmall = 2;
   static const double edgeInsetsMedium = 4;
   static const double edgeInsetsLarge = 8;
+  static const double edgeInsetsXSLarge = 10;
   static const double edgeInsetsXLarge = 12;
   static const double edgeInsetsXXLarge = 16;
   static const double edgeInsetsXXXLarge = 24;

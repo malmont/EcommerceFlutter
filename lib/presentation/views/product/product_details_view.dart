@@ -87,6 +87,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
 
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colours.white,
         title: Text(widget.product.name),
       ),
       body: BlocBuilder<ProductBloc, ProductState>(
@@ -286,8 +287,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: Units.edgeInsetsLarge,
-                                          vertical: Units.edgeInsetsLarge),
+                                          horizontal: Units.edgeInsetsXSLarge,
+                                          vertical: Units.edgeInsetsXSLarge),
                                       margin: const EdgeInsets.all(
                                           Units.edgeInsetsMedium),
                                       decoration: BoxDecoration(
