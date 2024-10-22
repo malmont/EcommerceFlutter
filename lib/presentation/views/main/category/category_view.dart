@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../design/design.dart';
 import '../../../blocs/category/category_bloc.dart';
 import '../../../widgets/category_card.dart';
 
@@ -28,6 +29,7 @@ class _CategoryViewState extends State<CategoryView> {
                 top: 12,
               ),
               child: TextField(
+                style: TextStyles.interRegularBody1,
                 controller: _textEditingController,
                 autofocus: false,
                 onSubmitted: (val) {
@@ -41,33 +43,38 @@ class _CategoryViewState extends State<CategoryView> {
                         const EdgeInsets.only(left: 20, bottom: 22, top: 22),
                     prefixIcon: const Padding(
                       padding: EdgeInsets.only(left: 8),
-                      child: Icon(Icons.search),
+                      child: Icon(
+                        Icons.search,
+                        color: Colours.colorsButtonMenu,
+                      ),
                     ),
                     suffixIcon: _textEditingController.text.isNotEmpty
                         ? Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: IconButton(
-                          onPressed: () {
-                            setState(() {
-                              _textEditingController.clear();
-                              context.read<CategoryBloc>().add(const FilterCategories(''));
-                            });
-                          },
-                          icon: const Icon(Icons.clear)),
-                    )
+                            padding: const EdgeInsets.only(right: 8),
+                            child: IconButton(
+                                onPressed: () {
+                                  setState(() {
+                                    _textEditingController.clear();
+                                    context
+                                        .read<CategoryBloc>()
+                                        .add(const FilterCategories(''));
+                                  });
+                                },
+                                icon: const Icon(Icons.clear)),
+                          )
                         : null,
                     border: const OutlineInputBorder(),
                     hintText: "Search Category",
                     fillColor: Colors.grey.shade100,
                     filled: true,
                     focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            const BorderSide(color: Colors.white, width: 3.0),
-                        borderRadius: BorderRadius.circular(26)),
+                        borderSide: const BorderSide(
+                            color: Colours.colorsButtonMenu, width: 1.0),
+                        borderRadius: BorderRadius.circular(16)),
                     enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(26),
-                      borderSide:
-                          const BorderSide(color: Colors.white, width: 3.0),
+                      borderRadius: BorderRadius.circular(16),
+                      borderSide: const BorderSide(
+                          color: Colours.colorsButtonMenu, width: 1.0),
                     )),
               ),
             ),

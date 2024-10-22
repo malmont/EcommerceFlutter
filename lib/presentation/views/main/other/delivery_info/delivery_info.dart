@@ -4,6 +4,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 
 import '../../../../../core/constant/images.dart';
 import '../../../../../data/models/user/delivery_info_model.dart';
+import '../../../../../design/design.dart';
 import '../../../../../domain/entities/user/delivery_info.dart';
 import '../../../../blocs/delivery_info/delivery_info_action/delivery_info_action_cubit.dart';
 import '../../../../blocs/delivery_info/delivery_info_fetch/delivery_info_fetch_cubit.dart';
@@ -40,15 +41,15 @@ class _DeliveryInfoViewState extends State<DeliveryInfoView> {
         ),
         body: BlocBuilder<DeliveryInfoFetchCubit, DeliveryInfoFetchState>(
           builder: (context, state) {
-            if(state is! DeliveryInfoFetchLoading && state.deliveryInformation.isEmpty) {
+            if (state is! DeliveryInfoFetchLoading &&
+                state.deliveryInformation.isEmpty) {
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Image.asset(kEmptyDeliveryInfo),
                   const Text("Delivery information are Empty!"),
                   SizedBox(
-                    height:
-                    MediaQuery.of(context).size.height * 0.1,
+                    height: MediaQuery.of(context).size.height * 0.1,
                   )
                 ],
               );
@@ -75,6 +76,7 @@ class _DeliveryInfoViewState extends State<DeliveryInfoView> {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: FloatingActionButton(
+              backgroundColor: Colours.colorsButtonMenu,
               onPressed: () {
                 showModalBottomSheet<void>(
                   context: context,
@@ -120,7 +122,7 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
   final TextEditingController city = TextEditingController();
   final TextEditingController zipCode = TextEditingController();
   final TextEditingController contactNumber = TextEditingController();
-   final TextEditingController country = TextEditingController();
+  final TextEditingController country = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -130,7 +132,7 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
       firstName.text = widget.deliveryInfo!.firstName;
       lastName.text = widget.deliveryInfo!.lastName;
       addressLineOne.text = widget.deliveryInfo!.addressLineOne;
-      addressLineTwo.text = widget.deliveryInfo!.addressLineTwo;
+      addressLineTwo.text = widget.deliveryInfo!.addressLineTwo!;
       city.text = widget.deliveryInfo!.city;
       zipCode.text = widget.deliveryInfo!.zipCode;
       contactNumber.text = widget.deliveryInfo!.contactNumber;
@@ -256,7 +258,7 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                       return null;
                     },
                   ),
-                   const SizedBox(
+                  const SizedBox(
                     height: 10,
                   ),
                   InputTextFormField(
@@ -302,7 +304,10 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                                 addressLineTwo: addressLineTwo.text,
                                 city: city.text,
                                 zipCode: zipCode.text,
-                                contactNumber: contactNumber.text, country: country.text,
+                                contactNumber: contactNumber.text,
+                                country: country.text,
+                                fullname: '',
+                                company: '',
                               ));
                         } else {
                           context
@@ -315,7 +320,10 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                                 addressLineTwo: addressLineTwo.text,
                                 city: city.text,
                                 zipCode: zipCode.text,
-                                contactNumber: contactNumber.text, country: country.text,
+                                contactNumber: contactNumber.text,
+                                country: country.text,
+                                fullname: '',
+                                company: '',
                               ));
                         }
                       }

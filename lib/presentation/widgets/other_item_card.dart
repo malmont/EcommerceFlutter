@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../design/design.dart';
+
 class OtherItemCard extends StatelessWidget {
   final String title;
   final Function()? onClick;
@@ -12,12 +14,7 @@ class OtherItemCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        left: 20,
-        right: 20,
-        bottom: 4,
-        top: 2
-      ),
+      padding: const EdgeInsets.only(left: 20, right: 20, bottom: 4, top: 2),
       child: InkWell(
         borderRadius: BorderRadius.circular(16),
         onTap: onClick,
@@ -25,16 +22,15 @@ class OtherItemCard extends StatelessWidget {
           decoration: BoxDecoration(
             color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(16),
-            boxShadow: [
+            boxShadow: const [
               BoxShadow(
-                color: Theme.of(context).shadowColor.withOpacity(0.1),
-                spreadRadius: 1,
-                blurRadius: 8,
-                offset: const Offset(0, 1),
+                color: Colors.black26,
+                blurRadius: 10.0,
+                offset: Offset(0, 5),
               ),
             ],
             border: Border.all(
-              color: Theme.of(context).shadowColor.withOpacity(0.1),
+              color: Colours.colorsButtonMenu.withOpacity(0.45),
             ),
           ),
           child: Padding(

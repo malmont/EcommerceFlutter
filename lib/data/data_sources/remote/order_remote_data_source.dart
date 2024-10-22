@@ -1,7 +1,7 @@
 import 'package:eshop/core/error/failures.dart';
 import 'package:eshop/data/models/order/order_detail_response_model.dart';
 import 'package:http/http.dart' as http;
-
+import 'dart:developer'; // Pour utiliser log()
 import '../../../../core/error/exceptions.dart';
 import '../../../core/constant/strings.dart';
 import '../../models/order/order_details_model.dart';
@@ -25,7 +25,7 @@ class OrderRemoteDataSourceSourceImpl implements OrderRemoteDataSource {
       },
       body: orderDetailResponseModelToJson(params),
     );
-    if (response.statusCode == 200  || response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       return true;
     } else {
       throw ServerException();
@@ -35,14 +35,22 @@ class OrderRemoteDataSourceSourceImpl implements OrderRemoteDataSource {
   @override
   Future<List<OrderDetailsModel>> getOrders(String token) async {
     final response = await client.get(
-      Uri.parse('$baseUrl/orders'),
+      Uri.parse('https://backend-strapi.online/jeesign/api/ordersuser'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
+
     if (response.statusCode == 200) {
-      return orderDetailsModelListFromJson(response.body);
+      log('Response body: ${response.body}');
+
+      try {
+        return orderDetailsModelListFromJson(response.body);
+      } catch (e) {
+        log('Error during JSON deserialization: $e');
+        throw ServerFailure();
+      }
     } else {
       throw ServerFailure();
     }
