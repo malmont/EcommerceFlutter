@@ -36,7 +36,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         title: const Text('Profile'),
       ),
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
+        padding: const EdgeInsets.symmetric(
+            horizontal: Units.edgeInsetsXXXLarge,
+            vertical: Units.edgeInsetsXXXLarge),
         child: ListView(
           children: [
             Hero(
@@ -48,21 +50,21 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ),
             ),
             const SizedBox(
-              height: 50,
+              height: Units.sizedbox_150,
             ),
             InputTextFormField(
               controller: firstNameController,
               hint: 'First Name',
             ),
             const SizedBox(
-              height: 12,
+              height: Units.sizedbox_12,
             ),
             InputTextFormField(
               controller: firstNameController,
               hint: 'Last Name',
             ),
             const SizedBox(
-              height: 12,
+              height: Units.sizedbox_12,
             ),
             InputTextFormField(
               controller: email,
@@ -70,18 +72,16 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               hint: 'Email Address',
             ),
             const SizedBox(
-              height: 12,
+              height: Units.sizedbox_12,
             ),
-            // InputTextFormField(
-            //   controller: firstNameController,
-            //   hint: 'Contact Number',
-            // ),
           ],
         ),
       ),
       bottomNavigationBar: SafeArea(
           child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+        padding: const EdgeInsets.symmetric(
+            horizontal: Units.edgeInsetsXXXLarge,
+            vertical: Units.edgeInsetsXLarge),
         child: ElevatedButton(
           style: CustomButtonStyle.customButtonStyle(
               type: ButtonType.selectedButton, isSelected: isSelected),

@@ -33,7 +33,8 @@ class CategoryCard extends StatelessWidget {
               children: [
                 Card(
                   color: Colors.grey.shade100,
-                  margin: const EdgeInsets.only(bottom: 16),
+                  margin:
+                      const EdgeInsets.only(bottom: Units.edgeInsetsXXLarge),
                   elevation: 4,
                   clipBehavior: Clip.antiAlias,
                   shape: RoundedRectangleBorder(
@@ -64,7 +65,8 @@ class CategoryCard extends StatelessWidget {
                           vertical: 6, horizontal: 10),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(15.0),
+                        borderRadius:
+                            BorderRadius.circular(Units.radiusXXXXXLarge),
                         boxShadow: const [
                           BoxShadow(
                             color: Colours.colorsButtonMenu,
@@ -88,10 +90,10 @@ class CategoryCard extends StatelessWidget {
               child: Card(
                 color: Colors.grey.shade100,
                 elevation: 4,
-                margin: const EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: Units.edgeInsetsXXLarge),
                 clipBehavior: Clip.antiAlias,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(Units.radiusXXXXLarge),
                 ),
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height * 0.18,

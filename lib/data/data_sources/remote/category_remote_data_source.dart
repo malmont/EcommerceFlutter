@@ -14,7 +14,7 @@ class CategoryRemoteDataSourceImpl implements CategoryRemoteDataSource {
 
   @override
   Future<List<CategoryModel>> getCategories() =>
-      _getCategoryFromUrl('https://backend-strapi.online/jeesign/api/category');
+      _getCategoryFromUrl('$baseUrl/category');
 
   Future<List<CategoryModel>> _getCategoryFromUrl(String url) async {
     final response = await client.get(

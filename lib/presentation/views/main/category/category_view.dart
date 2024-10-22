@@ -18,7 +18,8 @@ class _CategoryViewState extends State<CategoryView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding:
+            const EdgeInsets.symmetric(horizontal: Units.edgeInsetsXXLarge),
         child: Column(
           children: [
             SizedBox(
@@ -39,10 +40,12 @@ class _CategoryViewState extends State<CategoryView> {
                   context.read<CategoryBloc>().add(FilterCategories(val));
                 }),
                 decoration: InputDecoration(
-                    contentPadding:
-                        const EdgeInsets.only(left: 20, bottom: 22, top: 22),
+                    contentPadding: const EdgeInsets.only(
+                        left: Units.edgeInsetsXXLarge,
+                        bottom: Units.edgeInsetsXXXLarge,
+                        top: Units.edgeInsetsXXXLarge),
                     prefixIcon: const Padding(
-                      padding: EdgeInsets.only(left: 8),
+                      padding: EdgeInsets.only(left: Units.edgeInsetsLarge),
                       child: Icon(
                         Icons.search,
                         color: Colours.colorsButtonMenu,

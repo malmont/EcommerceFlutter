@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:eshop/design/units.dart';
 import 'package:eshop/presentation/blocs/delivery_info/delivery_info_fetch/delivery_info_fetch_cubit.dart';
 import 'package:eshop/presentation/blocs/order/order_fetch/order_fetch_cubit.dart';
 import 'package:flutter/material.dart';
@@ -6,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../core/constant/images.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../design/design.dart';
 import '../../../blocs/cart/cart_bloc.dart';
 import '../../../blocs/user/user_bloc.dart';
 import '../../../widgets/other_item_card.dart';
@@ -19,9 +21,11 @@ class OtherView extends StatelessWidget {
       child: ListView(
         physics: const BouncingScrollPhysics(),
         children: [
-          const SizedBox(height: 10),
+          const SizedBox(height: Units.sizedbox_10),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            padding: const EdgeInsets.symmetric(
+                horizontal: Units.edgeInsetsXXXLarge,
+                vertical: Units.edgeInsetsXLarge),
             child: BlocBuilder<UserBloc, UserState>(
               builder: (context, state) {
                 if (state is UserLogged) {
@@ -38,13 +42,13 @@ class OtherView extends StatelessWidget {
                             ? CachedNetworkImage(
                                 imageUrl: state.user.image!,
                                 imageBuilder: (context, image) => CircleAvatar(
-                                  radius: 36.0,
+                                  radius: Units.radiusXXXXXXXXXLarge,
                                   backgroundImage: image,
                                   backgroundColor: Colors.transparent,
                                 ),
                               )
                             : const CircleAvatar(
-                                radius: 36.0,
+                                radius: Units.radiusXXXXXXXXXLarge,
                                 backgroundImage: AssetImage(kUserAvatar),
                                 backgroundColor: Colors.transparent,
                               ),
@@ -67,22 +71,22 @@ class OtherView extends StatelessWidget {
                     onTap: () {
                       Navigator.of(context).pushNamed(AppRouter.signIn);
                     },
-                    child: Row(
+                    child: const Row(
                       children: [
-                        const CircleAvatar(
-                          radius: 36.0,
+                        CircleAvatar(
+                          radius: Units.radiusXXXXXXXXXLarge,
                           backgroundImage: AssetImage(kUserAvatar),
                           backgroundColor: Colors.transparent,
                         ),
-                        const SizedBox(width: 12),
+                        SizedBox(width: Units.sizedbox_12),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
                               "Login in your account",
-                              style: Theme.of(context).textTheme.titleLarge,
+                              style: TextStyles.interBoldBody1,
                             ),
-                            const Text("")
+                            Text("")
                           ],
                         ),
                       ],
@@ -92,10 +96,11 @@ class OtherView extends StatelessWidget {
               },
             ),
           ),
-          const SizedBox(height: 25),
+          const SizedBox(height: Units.sizedbox_25),
           BlocBuilder<UserBloc, UserState>(
             builder: (context, state) {
               return OtherItemCard(
+                icon: Icons.person,
                 onClick: () {
                   if (state is UserLogged) {
                     Navigator.of(context).pushNamed(
@@ -114,8 +119,9 @@ class OtherView extends StatelessWidget {
             builder: (context, state) {
               if (state is UserLogged) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 6),
+                  padding: const EdgeInsets.only(top: Units.edgeInsetsLarge),
                   child: OtherItemCard(
+                    icon: Icons.shopping_bag,
                     onClick: () {
                       Navigator.of(context).pushNamed(AppRouter.orders);
                     },
@@ -131,13 +137,14 @@ class OtherView extends StatelessWidget {
             builder: (context, state) {
               if (state is UserLogged) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 6),
+                  padding: const EdgeInsets.only(top: Units.edgeInsetsLarge),
                   child: OtherItemCard(
                     onClick: () {
                       Navigator.of(context)
                           .pushNamed(AppRouter.deliveryDetails);
                     },
                     title: "Delivery Info",
+                    icon: Icons.local_shipping,
                   ),
                 );
               } else {
@@ -145,13 +152,14 @@ class OtherView extends StatelessWidget {
               }
             },
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: Units.sizedbox_8),
           BlocBuilder<UserBloc, UserState>(
             builder: (context, state) {
               if (state is UserLogged) {
                 return Padding(
-                  padding: const EdgeInsets.only(top: 6),
+                  padding: const EdgeInsets.only(top: Units.edgeInsetsLarge),
                   child: OtherItemCard(
+                    icon: Icons.local_shipping,
                     onClick: () {
                       Navigator.of(context).pushNamed(AppRouter.carrier);
                     },
@@ -163,25 +171,28 @@ class OtherView extends StatelessWidget {
               }
             },
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: Units.sizedbox_8),
           OtherItemCard(
+            icon: Icons.settings,
             onClick: () {
               Navigator.of(context).pushNamed(AppRouter.settings);
             },
             title: "Settings",
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: Units.sizedbox_8),
           OtherItemCard(
+            icon: Icons.info,
             onClick: () {
               Navigator.of(context).pushNamed(AppRouter.about);
             },
             title: "About",
           ),
-          const SizedBox(height: 6),
+          const SizedBox(height: Units.sizedbox_8),
           BlocBuilder<UserBloc, UserState>(
             builder: (context, state) {
               if (state is UserLogged) {
                 return OtherItemCard(
+                  icon: Icons.logout,
                   onClick: () {
                     context.read<UserBloc>().add(SignOutUser());
                     context.read<CartBloc>().add(const ClearCart());
@@ -197,7 +208,9 @@ class OtherView extends StatelessWidget {
               }
             },
           ),
-          SizedBox(height: (MediaQuery.of(context).padding.bottom + 50)),
+          SizedBox(
+              height:
+                  (MediaQuery.of(context).padding.bottom + Units.sizedbox_50)),
         ],
       ),
     );

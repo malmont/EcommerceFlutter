@@ -1,5 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dartz/dartz.dart';
 import 'package:eshop/core/extension/string_extension.dart';
+import 'package:eshop/design/units.dart';
 import 'package:eshop/domain/entities/order/order_detail_response.dart';
 import 'package:eshop/presentation/blocs/carrier/carrier_info/carrier_fetch_cubit.dart';
 import 'package:eshop/presentation/blocs/cart/cart_bloc.dart';
@@ -57,7 +59,8 @@ class OrderCheckoutView extends StatelessWidget {
             title: const Text('Order Checkout'),
           ),
           body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Units.edgeInsetsXXXLarge),
               child: ListView(
                 physics: const BouncingScrollPhysics(),
                 children: [
@@ -67,7 +70,7 @@ class OrderCheckoutView extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(Units.radiusXXXLarge),
                       boxShadow: const [
                         BoxShadow(
                           color: Colors.black26,
@@ -79,7 +82,8 @@ class OrderCheckoutView extends StatelessWidget {
                     child: Stack(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 8),
+                          padding: const EdgeInsets.only(
+                              top: Units.edgeInsetsXLarge),
                           child: OutlineLabelCard(
                             labelStyle: TextStyles.interRegularBody1
                                 .copyWith(color: Colours.colorsButtonMenu),
@@ -102,7 +106,7 @@ class OrderCheckoutView extends StatelessWidget {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                              "${state.selectedDeliveryInformation!.firstName.capitalize()} ${state.selectedDeliveryInformation!.lastName}, ${state.selectedDeliveryInformation!.contactNumber}",
+                                              "${state.selectedDeliveryInformation!.firstName} ${state.selectedDeliveryInformation!.lastName}, ${state.selectedDeliveryInformation!.contactNumber}",
                                               style: TextStyles.interBoldBody2),
                                           Text(
                                               "${state.selectedDeliveryInformation!.addressLineOne}, ${state.selectedDeliveryInformation!.addressLineTwo}, ${state.selectedDeliveryInformation!.city}, ${state.selectedDeliveryInformation!.zipCode}",
@@ -112,11 +116,14 @@ class OrderCheckoutView extends StatelessWidget {
                                   );
                                 } else {
                                   return Container(
-                                    height: 50,
+                                    height: Units.u56,
                                     padding: const EdgeInsets.only(
-                                        top: 20, bottom: 8, left: 4),
+                                        top: Units.edgeInsetsXXXLarge,
+                                        bottom: Units.edgeInsetsLarge,
+                                        left: Units.edgeInsetsMedium),
                                     child: const Text(
                                       "Please select delivery information",
+                                      style: TextStyles.interRegularBody1,
                                     ),
                                   );
                                 }
@@ -134,7 +141,7 @@ class OrderCheckoutView extends StatelessWidget {
                             },
                             icon: const Icon(
                               Icons.edit,
-                              size: 18,
+                              size: Units.u18,
                               color: Colours.colorsButtonMenu,
                             ),
                           ),
@@ -148,7 +155,7 @@ class OrderCheckoutView extends StatelessWidget {
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(Units.radiusXXXLarge),
                       boxShadow: const [
                         BoxShadow(
                           color: Colors.black26,
@@ -160,7 +167,8 @@ class OrderCheckoutView extends StatelessWidget {
                     child: Stack(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(top: 8),
+                          padding: const EdgeInsets.only(
+                              top: Units.edgeInsetsXLarge),
                           child: OutlineLabelCard(
                             labelStyle: TextStyles.interRegularBody1
                                 .copyWith(color: Colours.colorsButtonMenu),
@@ -176,10 +184,11 @@ class OrderCheckoutView extends StatelessWidget {
                                   return Row(
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.all(8.0),
+                                        padding: const EdgeInsets.all(
+                                            Units.edgeInsetsLarge),
                                         child: CachedNetworkImage(
-                                          width: 50,
-                                          height: 50,
+                                          width: Units.u56,
+                                          height: Units.u56,
                                           fit: BoxFit.cover,
                                           imageUrl:
                                               state.selectedCarrier!.photo,
@@ -188,10 +197,10 @@ class OrderCheckoutView extends StatelessWidget {
                                       Container(
                                         color: Colors.transparent,
                                         padding: const EdgeInsets.only(
-                                            top: 16,
-                                            bottom: 12,
-                                            left: 4,
-                                            right: 10),
+                                            top: Units.edgeInsetsXXLarge,
+                                            bottom: Units.edgeInsetsXLarge,
+                                            left: Units.edgeInsetsMedium,
+                                            right: Units.edgeInsetsXLarge),
                                         child: Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceEvenly,
@@ -214,11 +223,14 @@ class OrderCheckoutView extends StatelessWidget {
                                   );
                                 } else {
                                   return Container(
-                                    height: 50,
+                                    height: Units.u56,
                                     padding: const EdgeInsets.only(
-                                        top: 20, bottom: 8, left: 4),
+                                        top: Units.edgeInsetsXXXLarge,
+                                        bottom: Units.edgeInsetsLarge,
+                                        left: Units.edgeInsetsMedium),
                                     child: const Text(
                                       "Please select delivery information",
+                                      style: TextStyles.interRegularBody1,
                                     ),
                                   );
                                 }
@@ -236,7 +248,7 @@ class OrderCheckoutView extends StatelessWidget {
                             },
                             icon: const Icon(
                               Icons.edit,
-                              size: 18,
+                              size: Units.u18,
                               color: Colours.colorsButtonMenu,
                             ),
                           ),
@@ -245,12 +257,12 @@ class OrderCheckoutView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 16,
+                    height: Units.sizedbox_16,
                   ),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(Units.radiusXXXLarge),
                       boxShadow: const [
                         BoxShadow(
                           color: Colors.black26,
@@ -262,46 +274,49 @@ class OrderCheckoutView extends StatelessWidget {
                     child: Stack(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(
+                              top: Units.edgeInsetsXLarge),
                           child: OutlineLabelCard(
                             labelStyle: TextStyles.interRegularBody1
                                 .copyWith(color: Colours.colorsButtonMenu),
                             title: 'Selected Products',
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.only(top: 18, bottom: 8),
+                              padding: const EdgeInsets.only(
+                                  top: Units.edgeInsetsXXLarge,
+                                  bottom: Units.edgeInsetsLarge),
                               child: Column(
                                 children: items
                                     .map((product) => Padding(
-                                          padding:
-                                              const EdgeInsets.only(bottom: 8),
+                                          padding: const EdgeInsets.only(
+                                              bottom: Units.edgeInsetsLarge),
                                           child: Row(
                                             children: [
                                               SizedBox(
-                                                width: 85,
+                                                width: Units.sizedbox_85,
                                                 child: AspectRatio(
                                                   aspectRatio: 0.88,
                                                   child: ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              8.0),
+                                                      borderRadius: BorderRadius
+                                                          .circular(Units
+                                                              .radiusXXLarge),
                                                       child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
+                                                        padding: const EdgeInsets
+                                                            .all(Units
+                                                                .edgeInsetsLarge),
                                                         child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(12.0),
+                                                          padding: const EdgeInsets
+                                                              .all(Units
+                                                                  .edgeInsetsXLarge),
                                                           child: Container(
-                                                            width: 70,
-                                                            height: 70,
+                                                            width: Units.u70,
+                                                            height: Units.u70,
                                                             decoration:
                                                                 BoxDecoration(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          5.0),
+                                                                          Units
+                                                                              .radiusLarge),
                                                               boxShadow: const [
                                                                 BoxShadow(
                                                                   color: Colors
@@ -318,7 +333,8 @@ class OrderCheckoutView extends StatelessWidget {
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .circular(
-                                                                          15.0),
+                                                                          Units
+                                                                              .radiusXXXLarge),
                                                               child:
                                                                   CachedNetworkImage(
                                                                 imageUrl:
@@ -380,14 +396,16 @@ class OrderCheckoutView extends StatelessWidget {
                                                             style: TextStyles
                                                                 .interRegularBody1),
                                                         const SizedBox(
-                                                          width: 10,
+                                                          width:
+                                                              Units.sizedbox_10,
                                                         ),
                                                         Text(
                                                             'x${product.quantity}',
                                                             style: TextStyles
                                                                 .interRegularBody1),
                                                         const SizedBox(
-                                                          width: 10,
+                                                          width:
+                                                              Units.sizedbox_10,
                                                         ),
                                                         Row(
                                                           crossAxisAlignment:
@@ -430,14 +448,8 @@ class OrderCheckoutView extends StatelessWidget {
                                                                         .substring(
                                                                             0,
                                                                             1),
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      fontSize:
-                                                                          10,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                    ),
+                                                                    style: TextStyles
+                                                                        .interRegularBody2,
                                                                   ),
                                                                 )
                                                               ],
@@ -449,8 +461,10 @@ class OrderCheckoutView extends StatelessWidget {
                                                                       const EdgeInsets
                                                                           .all(
                                                                           4),
-                                                                  width: 20,
-                                                                  height: 20,
+                                                                  width:
+                                                                      Units.u20,
+                                                                  height:
+                                                                      Units.u20,
                                                                   decoration:
                                                                       BoxDecoration(
                                                                     shape: BoxShape
@@ -490,12 +504,12 @@ class OrderCheckoutView extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(
-                    height: 16,
+                    height: Units.sizedbox_16,
                   ),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(15.0),
+                      borderRadius: BorderRadius.circular(Units.radiusXXXLarge),
                       boxShadow: const [
                         BoxShadow(
                           color: Colors.black26,
@@ -507,7 +521,8 @@ class OrderCheckoutView extends StatelessWidget {
                     child: Stack(
                       children: [
                         Padding(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.only(
+                              top: Units.edgeInsetsXLarge),
                           child: OutlineLabelCard(
                             labelStyle: TextStyles.interRegularBody1
                                 .copyWith(color: Colours.colorsButtonMenu),
@@ -628,7 +643,9 @@ class OrderCheckoutView extends StatelessWidget {
               )),
           bottomNavigationBar: SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Units.edgeInsetsXXXLarge,
+                  vertical: Units.edgeInsetsLarge),
               child: Builder(builder: (context) {
                 return ElevatedButton(
                   style: CustomButtonStyle.customButtonStyle(

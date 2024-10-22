@@ -23,7 +23,7 @@ class DeliveryInfoRemoteDataSourceImpl implements DeliveryInfoRemoteDataSource {
   @override
   Future<List<DeliveryInfoModel>> getDeliveryInfo(token) async {
     final response = await client.get(
-      Uri.parse('https://backend-strapi.online/jeesign/api/adresses'),
+      Uri.parse('$baseUrl/adresses'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
@@ -39,14 +39,14 @@ class DeliveryInfoRemoteDataSourceImpl implements DeliveryInfoRemoteDataSource {
   @override
   Future<DeliveryInfoModel> addDeliveryInfo(params, token) async {
     final response = await client.post(
-      Uri.parse('https://backend-strapi.online/jeesign/api/adresses'),
+      Uri.parse('$baseUrl/adresses'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
       body: deliveryInfoModelToJson(params),
     );
-    if (response.statusCode == 200|| response.statusCode == 201) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       return deliveryInfoModelFromRemoteJson(response.body);
     } else {
       throw ServerException();
@@ -54,9 +54,10 @@ class DeliveryInfoRemoteDataSourceImpl implements DeliveryInfoRemoteDataSource {
   }
 
   @override
-  Future<DeliveryInfoModel> editDeliveryInfo(DeliveryInfoModel params, String token) async {
+  Future<DeliveryInfoModel> editDeliveryInfo(
+      DeliveryInfoModel params, String token) async {
     final response = await client.put(
-      Uri.parse('$baseUrl/users/delivery-info'),
+      Uri.parse('$baseUrl/adresses/${params.id}'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',

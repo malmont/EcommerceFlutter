@@ -1,3 +1,5 @@
+import 'package:eshop/design/text_styles.dart';
+import 'package:eshop/design/units.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
@@ -5,6 +7,7 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import '../../../core/constant/images.dart';
 import '../../../core/error/failures.dart';
 import '../../../core/router/app_router.dart';
+import '../../../design/design.dart';
 import '../../../domain/usecases/user/sign_up_usecase.dart';
 import '../../blocs/cart/cart_bloc.dart';
 import '../../blocs/user/user_bloc.dart';
@@ -29,6 +32,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isSelected = false;
     return BlocListener<UserBloc, UserState>(
       listener: (context, state) {
         EasyLoading.dismiss();
@@ -50,34 +54,35 @@ class _SignUpScreenState extends State<SignUpScreen> {
       },
       child: Scaffold(
           body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            padding:
+                const EdgeInsets.symmetric(horizontal: Units.edgeInsetsXXLarge),
             child: Form(
               key: _formKey,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(
-                    height: 50,
+                    height: Units.sizedbox_50,
                   ),
                   SizedBox(
-                      height: 80,
+                      height: Units.sizedbox_80,
                       child: Image.asset(
                         kAppLogo,
                         color: Colors.black,
                       )),
                   const SizedBox(
-                    height: 20,
+                    height: Units.sizedbox_20,
                   ),
                   const Text(
                     "Please use your e-mail address to crate a new account",
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                    style: TextStyles.interRegularBody1,
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(
-                    height: 40,
+                    height: Units.sizedbox_40,
                   ),
                   InputTextFormField(
                     controller: firstNameController,
@@ -91,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                   const SizedBox(
-                    height: 12,
+                    height: Units.sizedbox_12,
                   ),
                   InputTextFormField(
                     controller: lastNameController,
@@ -105,7 +110,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                   const SizedBox(
-                    height: 12,
+                    height: Units.sizedbox_12,
                   ),
                   InputTextFormField(
                     controller: emailController,
@@ -119,7 +124,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                   const SizedBox(
-                    height: 12,
+                    height: Units.sizedbox_12,
                   ),
                   InputTextFormField(
                     controller: passwordController,
@@ -134,7 +139,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     },
                   ),
                   const SizedBox(
-                    height: 12,
+                    height: Units.sizedbox_12,
                   ),
                   InputTextFormField(
                     controller: confirmPasswordController,
@@ -153,26 +158,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             confirmPasswordController.text) {
                         } else {
                           context.read<UserBloc>().add(SignUpUser(SignUpParams(
-                            firstName: firstNameController.text,
-                            lastName: lastNameController.text,
-                            email: emailController.text,
-                            password: passwordController.text,
-                          )));
-                        }
-                      }
-                    },
-                  ),
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  InputFormButton(
-                    color: Colors.black87,
-                    onClick: () {
-                      if (_formKey.currentState!.validate()) {
-                        if (passwordController.text !=
-                            confirmPasswordController.text) {
-                        } else {
-                          context.read<UserBloc>().add(SignUpUser(SignUpParams(
                                 firstName: firstNameController.text,
                                 lastName: lastNameController.text,
                                 email: emailController.text,
@@ -181,17 +166,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         }
                       }
                     },
-                    titleText: 'Sign Up',
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: Units.sizedbox_40,
                   ),
-                  InputFormButton(
-                    color: Colors.black87,
-                    onClick: () {
-                      Navigator.of(context).pop();
-                    },
-                    titleText: 'Back',
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      style: CustomButtonStyle.customButtonStyle(
+                          type: ButtonType.selectedButton,
+                          isSelected: isSelected),
+                      onPressed: () {
+                        if (_formKey.currentState!.validate()) {
+                          if (passwordController.text !=
+                              confirmPasswordController.text) {
+                          } else {
+                            context
+                                .read<UserBloc>()
+                                .add(SignUpUser(SignUpParams(
+                                  firstName: firstNameController.text,
+                                  lastName: lastNameController.text,
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                )));
+                          }
+                        }
+                      },
+                      child: const Text('Sign Up'),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: Units.sizedbox_10,
+                  ),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                        style: CustomButtonStyle.customButtonStyle(
+                            type: ButtonType.selectedButton,
+                            isSelected: isSelected),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          'Back',
+                          style: TextStyles.interRegularBody1
+                              .copyWith(color: Colours.colorsButtonMenu),
+                        )),
                   ),
                   const SizedBox(
                     height: 30,

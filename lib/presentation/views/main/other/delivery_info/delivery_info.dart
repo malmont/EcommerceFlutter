@@ -59,7 +59,9 @@ class _DeliveryInfoViewState extends State<DeliveryInfoView> {
                       state.deliveryInformation.isEmpty)
                   ? 5
                   : state.deliveryInformation.length,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: Units.edgeInsetsXXXLarge,
+                  vertical: Units.edgeInsetsXLarge),
               itemBuilder: (context, index) =>
                   (state is DeliveryInfoFetchLoading &&
                           state.deliveryInformation.isEmpty)
@@ -74,7 +76,7 @@ class _DeliveryInfoViewState extends State<DeliveryInfoView> {
         ),
         floatingActionButton: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(Units.edgeInsetsXLarge),
             child: FloatingActionButton(
               backgroundColor: Colours.colorsButtonMenu,
               onPressed: () {
@@ -168,7 +170,8 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
         height: MediaQuery.of(context).size.height * 0.7,
         child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24),
+            padding: const EdgeInsets.symmetric(
+                horizontal: Units.edgeInsetsXXXLarge),
             child: Form(
               key: _formKey,
               child: ListView(
@@ -180,7 +183,8 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                   InputTextFormField(
                     controller: firstName,
                     hint: 'First name',
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsXLarge),
                     validation: (String? val) {
                       if (val == null || val.isEmpty) {
                         return 'This field can\'t be empty';
@@ -189,12 +193,13 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                     },
                   ),
                   const SizedBox(
-                    height: 10,
+                    height: Units.sizedbox_10,
                   ),
                   InputTextFormField(
                     controller: lastName,
                     hint: 'Last name',
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsXLarge),
                     validation: (String? val) {
                       if (val == null || val.isEmpty) {
                         return 'This field can\'t be empty';
@@ -208,7 +213,8 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                   InputTextFormField(
                     controller: addressLineOne,
                     hint: 'Address line one',
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsXLarge),
                     validation: (String? val) {
                       if (val == null || val.isEmpty) {
                         return 'This field can\'t be empty';
@@ -222,7 +228,8 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                   InputTextFormField(
                     controller: addressLineTwo,
                     hint: 'Address line two',
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsXLarge),
                     validation: (String? val) {
                       if (val == null || val.isEmpty) {
                         return 'This field can\'t be empty';
@@ -236,7 +243,8 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                   InputTextFormField(
                     controller: city,
                     hint: 'City',
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsXLarge),
                     validation: (String? val) {
                       if (val == null || val.isEmpty) {
                         return 'This field can\'t be empty';
@@ -250,7 +258,8 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                   InputTextFormField(
                     controller: zipCode,
                     hint: 'Zip code',
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsXLarge),
                     validation: (String? val) {
                       if (val == null || val.isEmpty) {
                         return 'This field can\'t be empty';
@@ -264,7 +273,8 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                   InputTextFormField(
                     controller: country,
                     hint: 'Country',
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsXLarge),
                     validation: (String? val) {
                       if (val == null || val.isEmpty) {
                         return 'This field can\'t be empty';
@@ -278,7 +288,8 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                   InputTextFormField(
                     controller: contactNumber,
                     hint: 'Contact number',
-                    contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: Units.edgeInsetsXLarge),
                     validation: (String? val) {
                       if (val == null || val.isEmpty) {
                         return 'This field can\'t be empty';
@@ -286,9 +297,7 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                       return null;
                     },
                   ),
-                  const SizedBox(
-                    height: 18,
-                  ),
+                  const SizedBox(height: Units.sizedbox_20),
                   InputFormButton(
                     color: Colors.black87,
                     onClick: () {
@@ -331,7 +340,7 @@ class _DeliveryInfoFormState extends State<DeliveryInfoForm> {
                     titleText: widget.deliveryInfo == null ? 'Save' : 'Update',
                   ),
                   const SizedBox(
-                    height: 8,
+                    height: Units.sizedbox_8,
                   ),
                   InputFormButton(
                     color: Colors.black87,

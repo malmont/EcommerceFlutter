@@ -58,7 +58,7 @@ class _InputTextFormFieldState extends State<InputTextFormField> {
             ? IconButton(
                 icon: Icon(
                   _passwordVisible ? Icons.visibility : Icons.visibility_off,
-                  color: Colors.black87,
+                  color: Colours.colorsButtonMenu,
                 ),
                 onPressed: () {
                   setState(() {

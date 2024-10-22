@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:eshop/design/units.dart';
 import 'package:eshop/domain/entities/product/variant.dart';
 import 'package:eshop/presentation/blocs/product/product_bloc.dart';
 import 'package:flutter/material.dart';
@@ -104,17 +105,19 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
             return SafeArea(
               child: SingleChildScrollView(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(Units.edgeInsetsXXLarge),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CarouselSlider(
                         items: [
                           Padding(
-                            padding: const EdgeInsets.all(12.0),
+                            padding:
+                                const EdgeInsets.all(Units.edgeInsetsXLarge),
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0),
+                                borderRadius: BorderRadius.circular(
+                                    Units.radiusXXXXXLarge),
                                 boxShadow: const [
                                   BoxShadow(
                                     color: Colors.black26,
@@ -124,7 +127,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                 ],
                               ),
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15.0),
+                                borderRadius: BorderRadius.circular(
+                                    Units.radiusXXXXXLarge),
                                 child: CachedNetworkImage(
                                   imageUrl: widget.product.image,
                                   placeholder: (context, url) =>
@@ -143,10 +147,12 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.all(12.0),
+                            padding:
+                                const EdgeInsets.all(Units.edgeInsetsXXLarge),
                             child: Container(
                               decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(15.0),
+                                borderRadius: BorderRadius.circular(
+                                    Units.radiusXXXXXLarge),
                                 boxShadow: const [
                                   BoxShadow(
                                     color: Colors.black26,
@@ -156,7 +162,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                 ],
                               ),
                               child: ClipRRect(
-                                borderRadius: BorderRadius.circular(15.0),
+                                borderRadius: BorderRadius.circular(
+                                    Units.radiusXXXXXLarge),
                                 child: CachedNetworkImage(
                                   imageUrl: widget.product.image,
                                   placeholder: (context, url) =>
@@ -203,27 +210,30 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                             .copyWith(color: Colours.colorsButtonMenu),
                       ),
                       const SizedBox(
-                        height: 5,
+                        height: Units.sizedbox_5,
                       ),
                       Text(
                           '\$${(widget.product.price / 100).toStringAsFixed(2)}',
                           style: TextStyles.interBoldBody1
                               .copyWith(color: Colours.primaryPalette)),
                       const SizedBox(
-                        height: 5,
+                        height: Units.sizedbox_5,
                       ),
                       SizedBox(
-                        width: 220,
+                        width: Units.sizedbox_220,
                         child: ElevatedButton(
                           style: CustomButtonStyle.customButtonStyle(
                               type: ButtonType.selectedButton,
                               isSelected: isSelected),
                           onPressed: resetSelection,
-                          child: const Text('Réinitialiser la sélection'),
+                          child: const Text(
+                            'Réinitialiser la sélection',
+                            style: TextStyles.interRegularBody2,
+                          ),
                         ),
                       ),
                       const SizedBox(
-                        height: 5,
+                        height: Units.sizedbox_5,
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -234,7 +244,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                             children: [
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 6.0),
+                                    horizontal: Units.edgeInsetsLarge,
+                                    vertical: Units.edgeInsetsLarge),
                                 decoration: BoxDecoration(
                                   color: Colors.black,
                                   borderRadius: BorderRadius.circular(5.0),
@@ -245,7 +256,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                       .copyWith(color: Colours.white),
                                 ),
                               ),
-                              const SizedBox(height: 10),
+                              const SizedBox(height: Units.sizedbox_10),
                               Wrap(
                                 children: (selectedColor != null
                                         ? getAvailableSizes(selectedColor!)
@@ -275,15 +286,18 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                     },
                                     child: Container(
                                       padding: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 8),
-                                      margin: const EdgeInsets.all(4),
+                                          horizontal: Units.edgeInsetsLarge,
+                                          vertical: Units.edgeInsetsLarge),
+                                      margin: const EdgeInsets.all(
+                                          Units.edgeInsetsMedium),
                                       decoration: BoxDecoration(
                                         border: Border.all(
                                           color: selectedSize == size
                                               ? Colors.black
                                               : Colors.grey,
                                         ),
-                                        borderRadius: BorderRadius.circular(8),
+                                        borderRadius: BorderRadius.circular(
+                                            Units.radiusXXLarge),
                                       ),
                                       child: Text(size.substring(0, 1)),
                                     ),
@@ -297,10 +311,12 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                             children: [
                               Container(
                                 padding: const EdgeInsets.symmetric(
-                                    horizontal: 8.0, vertical: 6.0),
+                                    horizontal: Units.edgeInsetsLarge,
+                                    vertical: Units.edgeInsetsLarge),
                                 decoration: BoxDecoration(
                                   color: Colors.black,
-                                  borderRadius: BorderRadius.circular(5.0),
+                                  borderRadius:
+                                      BorderRadius.circular(Units.radiusXLarge),
                                 ),
                                 child: Text(
                                   'Couleur',
@@ -308,7 +324,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                       .copyWith(color: Colours.white),
                                 ),
                               ),
-                              const SizedBox(height: 9),
+                              const SizedBox(height: Units.sizedbox_10),
                               Wrap(
                                 children: (selectedSize != null
                                         ? getAvailableColors(selectedSize!)
@@ -339,7 +355,8 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                       });
                                     },
                                     child: Container(
-                                      margin: const EdgeInsets.all(4),
+                                      margin: const EdgeInsets.all(
+                                          Units.edgeInsetsMedium),
                                       width: 40,
                                       height: 40,
                                       decoration: BoxDecoration(
@@ -358,13 +375,15 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                           ),
                         ],
                       ),
-                      const SizedBox(height: 10),
+                      const SizedBox(height: Units.sizedbox_10),
                       Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10.0),
-                        padding: const EdgeInsets.all(16.0),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: Units.edgeInsetsXLarge),
+                        padding: const EdgeInsets.all(Units.edgeInsetsXXLarge),
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(12.0),
+                          borderRadius:
+                              BorderRadius.circular(Units.radiusXXXXLarge),
                           boxShadow: const [
                             BoxShadow(
                               color: Colors.black26,
@@ -381,40 +400,34 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                                     children: [
                                       const Icon(Icons.color_lens,
                                           color: Colours.colorsButtonMenu),
-                                      const SizedBox(width: 8.0),
+                                      const SizedBox(width: Units.sizedbox_8),
                                       Text(
                                         'Couleur sélectionnée : ${selectedVariant.color.name}',
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyles.interRegularBody1,
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 10.0),
+                                  const SizedBox(height: Units.sizedbox_10),
                                   Row(
                                     children: [
                                       const Icon(Icons.format_size,
                                           color: Colours.colorsButtonMenu),
-                                      const SizedBox(width: 8.0),
+                                      const SizedBox(width: Units.sizedbox_8),
                                       Text(
                                         'Taille sélectionnée : ${selectedVariant.size.name}',
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyles.interRegularBody1,
                                       ),
                                     ],
                                   ),
-                                  const SizedBox(height: 10.0),
+                                  const SizedBox(height: Units.sizedbox_10),
                                   Row(
                                     children: [
                                       const Icon(Icons.inventory,
                                           color: Colours.colorsButtonMenu),
-                                      const SizedBox(width: 8.0),
+                                      const SizedBox(width: Units.sizedbox_8),
                                       Text(
                                         'Quantité en stock : ${selectedVariant.stockQuantity}',
-                                        style: const TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyles.interRegularBody1,
                                       ),
                                     ],
                                   ),
@@ -423,10 +436,7 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                             : const Center(
                                 child: Text(
                                   'Aucun variant sélectionné',
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.red),
+                                  style: TextStyles.interRegularBody1,
                                 ),
                               ),
                       ),
@@ -446,10 +456,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
               state is ProductLoaded ? state.selectedVariant : null;
 
           return Container(
-            margin: const EdgeInsets.all(15),
+            margin: const EdgeInsets.all(Units.edgeInsetsXXLarge),
             decoration: BoxDecoration(
               color: Theme.of(context).colorScheme.secondary,
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(Units.radiusXXXXXLarge),
             ),
             height: 80 + MediaQuery.of(context).padding.bottom,
             padding: EdgeInsets.only(
@@ -466,16 +476,13 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Total",
-                      style: TextStyle(color: Colors.white70, fontSize: 16),
-                    ),
+                    Text("Total",
+                        style: TextStyles.interRegularBody1
+                            .copyWith(color: Colours.white)),
                     Text(
                       '\$${(widget.product.price / 100).toStringAsFixed(2)}',
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold),
+                      style:
+                          TextStyles.interBoldH6.copyWith(color: Colours.white),
                     ),
                   ],
                 ),
@@ -499,7 +506,10 @@ class _ProductDetailsViewState extends State<ProductDetailsView> {
                             Navigator.pop(context);
                           }
                         : null,
-                    child: const Text('Ajouter au panier'),
+                    child: const Text(
+                      'Ajouter au panier',
+                      style: TextStyles.interMediumBody2,
+                    ),
                   ),
                 ),
               ],

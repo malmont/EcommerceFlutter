@@ -1,30 +1,44 @@
+import 'package:eshop/design/units.dart';
+import 'package:eshop/presentation/blocs/order/order_fetch/order_fetch_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../design/design.dart';
 import '../../domain/entities/order/order_details.dart';
 import 'OrderDetailsPage.dart';
 
-class OrderInfoCard extends StatelessWidget {
+class OrderInfoCard extends StatefulWidget {
   final OrderDetails? orderDetails;
   const OrderInfoCard({Key? key, this.orderDetails}) : super(key: key);
 
   @override
+  State<OrderInfoCard> createState() => _OrderInfoCardState();
+}
+
+class _OrderInfoCardState extends State<OrderInfoCard> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<OrderFetchCubit>().getOrders();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    if (orderDetails != null) {
-      final totalPrice = orderDetails!.orderItems.fold(
+    if (widget.orderDetails != null) {
+      final totalPrice = widget.orderDetails!.orderItems.fold(
           0.0,
           (previousValue, element) =>
               previousValue + (element.totalPrice * element.quantity));
 
       return Padding(
-        padding: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.only(bottom: Units.edgeInsetsXXLarge),
         child: GestureDetector(
           onTap: () {
             Navigator.of(context).push(
               MaterialPageRoute(
                 builder: (context) =>
-                    OrderDetailsPage(orderDetails: orderDetails!),
+                    OrderDetailsPage(orderDetails: widget.orderDetails!),
               ),
             );
           },
@@ -51,9 +65,9 @@ class OrderInfoCard extends StatelessWidget {
                       children: [
                         const Icon(Icons.receipt_long,
                             color: Colours.colorsButtonMenu),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: Units.sizedbox_8),
                         Text(
-                          "Order ID: ${orderDetails!.id}",
+                          "Order ID: ${widget.orderDetails!.id}",
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
@@ -62,21 +76,21 @@ class OrderInfoCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    _buildStatusBadge(orderDetails!.status),
+                    _buildStatusBadge(widget.orderDetails!.status),
                   ],
                 ),
-                Divider(height: 24, color: Colours.colorsButtonMenu),
+                const Divider(height: 24, color: Colours.colorsButtonMenu),
                 _buildInfoRow(Icons.shopping_cart, "Items",
-                    "${orderDetails!.orderItems.length}"),
+                    "${widget.orderDetails!.orderItems.length}"),
                 _buildInfoRow(
                     Icons.location_on_sharp,
                     "Address",
-                    "${orderDetails!.shippingAdress.addressLineOne}"
-                        "${orderDetails!.shippingAdress.addressLineTwo}"),
+                    "${widget.orderDetails!.shippingAdress.addressLineOne}"
+                        "${widget.orderDetails!.shippingAdress.addressLineTwo}"),
                 _buildInfoRow(Icons.location_city, "Ville",
-                    orderDetails!.shippingAdress.city),
-                _buildInfoRow(
-                    Icons.calendar_today, "Date", orderDetails!.orderDate),
+                    widget.orderDetails!.shippingAdress.city),
+                _buildInfoRow(Icons.calendar_today, "Date",
+                    widget.orderDetails!.orderDate),
                 _buildInfoRow(Icons.attach_money, "Total",
                     "\$${(totalPrice / 100).toStringAsFixed(2)}"),
               ],
@@ -91,11 +105,11 @@ class OrderInfoCard extends StatelessWidget {
 
   Widget _buildInfoRow(IconData icon, String label, String value) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(vertical: Units.edgeInsetsMedium),
       child: Row(
         children: [
           Icon(icon, color: Colours.colorsButtonMenu),
-          const SizedBox(width: 8),
+          const SizedBox(width: Units.sizedbox_8),
           Expanded(
             child: Text(
               "$label: $value",
@@ -112,10 +126,12 @@ class OrderInfoCard extends StatelessWidget {
   Widget _buildStatusBadge(String? status) {
     final color = _getStatusColor(status);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      padding: const EdgeInsets.symmetric(
+          horizontal: Units.edgeInsetsXXLarge,
+          vertical: Units.edgeInsetsMedium),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(15.0),
+        borderRadius: BorderRadius.circular(Units.radiusXXXXXLarge),
         boxShadow: const [
           BoxShadow(
             color: Colors.black26,
@@ -138,11 +154,11 @@ class OrderInfoCard extends StatelessWidget {
       baseColor: Colors.grey.shade300,
       highlightColor: Colors.white,
       child: Padding(
-        padding: const EdgeInsets.only(bottom: 16),
+        padding: const EdgeInsets.only(bottom: Units.edgeInsetsXXLarge),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
-            borderRadius: BorderRadius.circular(15.0),
+            borderRadius: BorderRadius.circular(Units.radiusXXXXXLarge),
             boxShadow: const [
               BoxShadow(
                 color: Colors.black26,
@@ -152,7 +168,9 @@ class OrderInfoCard extends StatelessWidget {
             ],
           ),
           child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
+            padding: const EdgeInsets.symmetric(
+                vertical: Units.edgeInsetsXXLarge,
+                horizontal: Units.edgeInsetsXLarge),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -160,34 +178,34 @@ class OrderInfoCard extends StatelessWidget {
                   height: 14,
                   width: 100,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(Units.radiusXXLarge),
                     color: Colors.grey,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: Units.sizedbox_8),
                 Container(
                   height: 14,
                   width: 80,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(Units.radiusXXLarge),
                     color: Colors.grey,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: Units.sizedbox_8),
                 Container(
                   height: 14,
                   width: 120,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(Units.radiusXXLarge),
                     color: Colors.grey,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: Units.sizedbox_10),
                 Container(
                   height: 14,
                   width: 60,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.circular(Units.radiusXXLarge),
                     color: Colors.grey,
                   ),
                 ),
