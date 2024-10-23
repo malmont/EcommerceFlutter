@@ -108,9 +108,10 @@ class ProductCard extends StatelessWidget {
                   ),
           )),
           Padding(
-            padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+            padding: const EdgeInsets.fromLTRB(Units.edgeInsetsMedium,
+                Units.edgeInsetsMedium, Units.edgeInsetsMedium, 0),
             child: SizedBox(
-                height: Units.sizedbox_16,
+                height: Units.sizedbox_20,
                 child: product == null
                     ? Container(
                         width: 120,
@@ -125,7 +126,8 @@ class ProductCard extends StatelessWidget {
                             .copyWith(color: Colours.colorsButtonMenu))),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(4, 4, 4, 0),
+            padding: const EdgeInsets.fromLTRB(Units.edgeInsetsMedium,
+                Units.edgeInsetsMedium, Units.edgeInsetsMedium, 0),
             child: Row(
               children: [
                 SizedBox(
