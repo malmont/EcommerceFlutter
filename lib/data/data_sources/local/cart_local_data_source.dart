@@ -27,60 +27,54 @@ class CartLocalDataSourceImpl implements CartLocalDataSource {
   }
 
   @override
-Future<void> updateCart(List<CartItem> cartItems) async {
-  final List<CartItemModel> cartModels = cartItems
-      .map((item) => CartItemModel.fromParent(item))
-      .toList();
+  Future<void> updateCart(List<CartItem> cartItems) async {
+    final List<CartItemModel> cartModels =
+        cartItems.map((item) => CartItemModel.fromParent(item)).toList();
 
-  // Attendre que setString soit terminé, mais ne rien retourner
-  await sharedPreferences.setString(
-    cachedCart,
-    cartItemModelToJson(cartModels),
-  );
-}
-
-@override
-Future<void> saveCartItem(CartItemModel cartItem) async {
-  final jsonString = sharedPreferences.getString(cachedCart);
-  final List<CartItemModel> cart = [];
-  if (jsonString != null) {
-    cart.addAll(cartItemModelListFromLocalJson(jsonString));
-  }
-  
-  final existingItemIndex = cart.indexWhere(
-      (element) => element.product.id == cartItem.product.id);
-
-  if (existingItemIndex != -1) {
-    // Le produit existe déjà, on incrémente la quantité
-    final existingItem = cart[existingItemIndex];
-    cart[existingItemIndex] = existingItem.copyWith(
-      quantity: existingItem.quantity + 1,
+    await sharedPreferences.setString(
+      cachedCart,
+      cartItemModelToJson(cartModels),
     );
-  } else {
-    // Le produit n'existe pas, on l'ajoute
-    cart.add(cartItem);
   }
 
-  await sharedPreferences.setString(
-    cachedCart,
-    cartItemModelToJson(cart),
-  );
-}
-
-
-
   @override
-Future<List<CartItemModel>> getCart() async {
-  final jsonString = sharedPreferences.getString(cachedCart);
-  if (jsonString != null) {
-    return Future.value(cartItemModelListFromLocalJson(jsonString));
-  } else {
-    return Future.value([]);
+  Future<void> saveCartItem(CartItemModel cartItem) async {
+    final jsonString = sharedPreferences.getString(cachedCart);
+    final List<CartItemModel> cart = [];
+    if (jsonString != null) {
+      cart.addAll(cartItemModelListFromLocalJson(jsonString));
+    }
+
+    final existingItemIndex =
+        cart.indexWhere((element) => element.product.id == cartItem.product.id);
+
+    if (existingItemIndex != -1) {
+      final existingItem = cart[existingItemIndex];
+      cart[existingItemIndex] = existingItem.copyWith(
+        quantity: existingItem.quantity + 1,
+      );
+    } else {
+      cart.add(cartItem);
+    }
+
+    await sharedPreferences.setString(
+      cachedCart,
+      cartItemModelToJson(cart),
+    );
   }
-}
 
   @override
-  Future<bool> clearCart()async {
+  Future<List<CartItemModel>> getCart() async {
+    final jsonString = sharedPreferences.getString(cachedCart);
+    if (jsonString != null) {
+      return Future.value(cartItemModelListFromLocalJson(jsonString));
+    } else {
+      return Future.value([]);
+    }
+  }
+
+  @override
+  Future<bool> clearCart() async {
     return sharedPreferences.remove(cachedCart);
   }
 }
