@@ -67,15 +67,25 @@ class UserLocalDataSourceImpl implements UserLocalDataSource {
   }
 
   @override
-   Future<bool> isTokenAvailable() async {
+  Future<bool> isTokenAvailable() async {
     String? token = await secureStorage.read(key: cachedToken);
     if (token != null) {
-      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
-      if (JwtDecoder.isExpired(token)) {
+      try {
+        Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+        int? expirationTime = decodedToken['exp'];
+        if (expirationTime != null) {
+          DateTime expirationDate =
+              DateTime.fromMillisecondsSinceEpoch(expirationTime * 1000);
+          if (expirationDate.isBefore(DateTime.now())) {
+            await secureStorage.delete(key: cachedToken);
+            return Future.value(false);
+          }
+          return Future.value(true);
+        }
+      } catch (e) {
         await secureStorage.delete(key: cachedToken);
         return Future.value(false);
       }
-      return Future.value(true);
     }
     return Future.value(false);
   }
